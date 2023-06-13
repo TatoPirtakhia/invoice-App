@@ -24,7 +24,7 @@ function NewInvoice(props: {
   const [showTerm, setShowterm] = useState<boolean>(false);
 
   const clickTerm = () => {
-    setShowterm(!showTerm) ;
+    setShowterm(!showTerm);
   };
 
   const {
