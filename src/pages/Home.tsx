@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NewInvoice from "./NewInvoice/NewInvoice";
 import transformDate from "../controller/dateTransform";
+import Empty from "../assets/illustration-empty";
 
 interface CheckedItems {
   [key: string]: boolean;
@@ -58,7 +59,11 @@ function Home(props: {
           <p className="spartan font-bold text-[25px]  text-[#0C0E16] dark:text-white ">
             Invoices
           </p>
-          <p className="spartan font-medium text-[15px] text-[#888EB0] mt-[-8px] dark:text-[#DFE3FA]">{`${props.invoices.length} invoices`}</p>
+          <p className="spartan font-medium text-[15px] text-[#888EB0] mt-[-8px] dark:text-[#DFE3FA]">{`${
+            invoicesData.length !== 0
+              ? `${invoicesData.length} invoices`
+              : "No invoices"
+          } `}</p>
         </div>
         <div className="flex items-center gap-5">
           <div
@@ -142,68 +147,84 @@ function Home(props: {
         </div>
       </div>
       <div className="absolute z-10 top-0 w-full left-0">
-        {!isNewInvoice ? "" : <NewInvoice setIsNewInvoice={setIsNewInvoice} setInvoices={props.setInvoices} invoices={props.invoices} />}
+        {!isNewInvoice ? (
+          ""
+        ) : (
+          <NewInvoice
+            setIsNewInvoice={setIsNewInvoice}
+            setInvoices={props.setInvoices}
+            invoices={props.invoices}
+          />
+        )}
       </div>
-      {invoicesData.map((data: InvoiceData) => {
-        return (
-          <div
-            className="w-full  bg-white rounded-[8px] shadow-custom mb-4 p-6 dark:bg-[#1E2139] z-0"
-            id={data.id}
-            onClick={clickInvoice}
-            key={data.id}
-          >
-            <div className="flex justify-between mb-6">
-              <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white">
-                <span className="spartan font-bold text-[#7E88C3] text-[16px]">
-                  #
-                </span>
-                {`${data.id}`}
-              </p>
-              <p className="spartan font-medium text-[#858BB2] text-[16px] dark:text-[#FFFFFF] ">
-                {data.clientName}
-              </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="spartan font-medium tetx-[12px] text-[#7E88C3] dark:text-[#DFE3FA]">
-                  {data.paymentDue ? transformDate(data.paymentDue) : ""}
+      {invoicesData.length === 0 ? (
+        <div className="w-full flex flex-col items-center pt-[100px]">
+          <Empty />
+          <p className="mt-10 text-[#0C0E16] spartan text-[22px] font-bold dark:text-white">There is nothing here</p>
+        <p className="w-[70%] text-center spartan text-[#888EB0] dark:text-[#DFE3FA] font-medium text-[15px] mt-4">Create an invoice by clicking the <span className="font-bold">New</span> button and get started</p>
+        </div>
+      ) : (
+        invoicesData.map((data: InvoiceData) => {
+          return (
+            <div
+              className="w-full  bg-white rounded-[8px] shadow-custom mb-4 p-6 dark:bg-[#1E2139] z-0"
+              id={data.id}
+              onClick={clickInvoice}
+              key={data.id}
+            >
+              <div className="flex justify-between mb-6">
+                <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white">
+                  <span className="spartan font-bold text-[#7E88C3] text-[16px]">
+                    #
+                  </span>
+                  {`${data.id}`}
                 </p>
-                <p className="spartan font-bold text-[18px] dark:text-[#DFE3FA]">{`£ ${data.total}`}</p>
+                <p className="spartan font-medium text-[#858BB2] text-[16px] dark:text-[#FFFFFF] ">
+                  {data.clientName}
+                </p>
               </div>
-              <div
-                className={`${
-                  data.status === "paid"
-                    ? "bg-[#33D69F] bg-opacity-5"
-                    : data.status === "pending"
-                    ? "bg-[#FF8F00] bg-opacity-5 "
-                    : "bg-[#373B53] bg-opacity-5 dark:bg-opacity-5 dark:bg-[#DFE3FA]"
-                } w-[104px]  h-10 flex items-center justify-center gap-2`}
-              >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="spartan font-medium tetx-[12px] text-[#7E88C3] dark:text-[#DFE3FA]">
+                    {data.paymentDue ? transformDate(data.paymentDue) : ""}
+                  </p>
+                  <p className="spartan font-bold text-[18px] dark:text-[#DFE3FA]">{`£ ${data.total}`}</p>
+                </div>
                 <div
-                  className={`w-2 h-2 rounded-[50%] ${
+                  className={`${
                     data.status === "paid"
-                      ? "bg-[#33D69F] "
+                      ? "bg-[#33D69F] bg-opacity-5  "
                       : data.status === "pending"
-                      ? "bg-[#FF8F00] "
-                      : "bg-[#373B53] dark:bg-[#DFE3FA]"
-                  } `}
-                ></div>
-                <p
-                  className={`spartan font-bold text-[15px] ${
-                    data.status === "paid"
-                      ? "text-[#33D69F]"
-                      : data.status === "pending"
-                      ? "text-[#FF8F00]"
-                      : "text-[#373B53] dark:text-[#DFE3FA]"
-                  }`}
+                      ? "bg-[#FF8F00] bg-opacity-5   "
+                      : "bg-[#373B53] bg-opacity-5 dark:bg-opacity-5 dark:bg-[#DFE3FA]"
+                  } w-[104px]  h-10 flex items-center justify-center gap-2  rounded-md`}
                 >
-                  {data.status.charAt(0).toUpperCase() + data.status.slice(1)}
-                </p>
+                  <div
+                    className={`w-2 h-2 rounded-[50%]   ${
+                      data.status === "paid"
+                        ? "bg-[#33D69F] "
+                        : data.status === "pending"
+                        ? "bg-[#FF8F00] "
+                        : "bg-[#373B53] dark:bg-[#DFE3FA]"
+                    } `}
+                  ></div>
+                  <p
+                    className={`spartan font-bold text-[15px]  ${
+                      data.status === "paid"
+                        ? "text-[#33D69F]"
+                        : data.status === "pending"
+                        ? "text-[#FF8F00]"
+                        : "text-[#373B53] dark:text-[#DFE3FA] "
+                    }`}
+                  >
+                    {data.status.charAt(0).toUpperCase() + data.status.slice(1)}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
     </div>
   );
 }

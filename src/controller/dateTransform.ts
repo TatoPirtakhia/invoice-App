@@ -1,11 +1,21 @@
 const transformDate = (date: Date | string): string => {
   if (typeof date === 'string') {
-    const [day, month, year] = date.split('/').map(Number);
-    date = new Date(year, month - 1, day);
-  }
+    let transformedDate: Date;
 
-  if (isNaN(date.getTime())) {
-    return '';
+    if (date.includes('/')) {
+      const [day, month, year] = date.split('/').map(Number);
+      transformedDate = new Date(year, month - 1, day);
+    } else if (date.includes('-')) {
+      transformedDate = new Date(date);
+    } else {
+      return '';
+    }
+
+    if (isNaN(transformedDate.getTime())) {
+      return '';
+    }
+
+    date = transformedDate;
   }
 
   const day: number = date.getDate();

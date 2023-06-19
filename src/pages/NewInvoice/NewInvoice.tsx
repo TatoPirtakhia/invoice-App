@@ -27,6 +27,7 @@ function NewInvoice(props: {
   const [term, setTerm] = useState<string | null>("Select Payment Terms");
   const [showTerm, setShowterm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const clickTerm = () => {
     setShowterm(!showTerm);
@@ -143,10 +144,10 @@ function NewInvoice(props: {
     setValue("status", "pending");
     handleSubmit(onSubmit)();
   };
-  const submitDraft= () =>{
+  const submitDraft = () => {
     setValue("status", "draft");
     handleSubmit(onSubmit)();
-  }
+  };
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     if (date) {
@@ -175,9 +176,13 @@ function NewInvoice(props: {
           }}
         >
           <ArrowLeft />
-          <p className="spartan font-bold text-[15px] dark:text-white">Go Back</p>
+          <p className="spartan font-bold text-[15px] dark:text-white">
+            Go Back
+          </p>
         </div>
-        <h1 className="spartan font-bold text-[32px] dark:text-white">New Invoice</h1>
+        <h1 className="spartan font-bold text-[32px] dark:text-white">
+          New Invoice
+        </h1>
         <p className="spartan font-bold text-[15px] text-[#7C5DFA] mb-6">
           Bill From
         </p>
@@ -270,7 +275,9 @@ function NewInvoice(props: {
             id="ClientsName"
             {...register("clientName", { required: true })}
             className={`w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]  dark:bg-[#252945] dark:text-white ${
-              errors && errors.clientName ? "border-[red]" : "border-[#DFE3FA]  dark:border-[#252945]"
+              errors && errors.clientName
+                ? "border-[red]"
+                : "border-[#DFE3FA]  dark:border-[#252945]"
             }`}
           />
 
@@ -285,7 +292,9 @@ function NewInvoice(props: {
             id="ClientsEmail"
             {...register("clientEmail", { required: true })}
             className={`w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]  dark:bg-[#252945] dark:text-white ${
-              errors && errors.clientEmail ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
+              errors && errors.clientEmail
+                ? "border-[red]"
+                : "border-[#DFE3FA] dark:border-[#252945]"
             }`}
           />
 
@@ -377,9 +386,11 @@ function NewInvoice(props: {
             onChange={handleDateChange}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select a date"
-            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px]  rounded outline-none  dark:bg-[#252945] dark:text-white ${
-              errors && errors.createdAt ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
-            }`}
+            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+              errors && errors.createdAt ? "border-[red]" : "border-[#DFE3FA]  dark:border-[#252945]"
+            } ${isOpen ? "dark:bg-[#252945] border-[#7C5DFA] " : "border-[#DFE3FA] "}`}
+            onFocus={() => setIsOpen(true)}
+            onClickOutside={() => setIsOpen(false)}
           />
           <div className="absolute right-9 top-10">
             <Calendar />
@@ -398,7 +409,11 @@ function NewInvoice(props: {
             className={`w-[93%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
               errors && errors.paymentTerms
                 ? "border-[red]"
-                : "border-[#DFE3FA] dark:border-[#252945]"
+                : `${
+                    showTerm
+                      ? "border-[#7C5DFA] dark:border-[#252945]"
+                      : "border-[#DFE3FA] dark:border-[#252945]"
+                  }`
             }`}
           >
             <p>{term}</p>
@@ -407,13 +422,15 @@ function NewInvoice(props: {
           <div
             className={`${
               !showTerm ? "hidden" : ""
-            } absolute  w-[93%] bg-white shadow-term mt-6 dark:bg-[#252945]`}
+            } absolute  w-[93%] bg-white rounded-lg shadow-term mt-6 dark:bg-[#252945]`}
           >
             <p
               onClick={handleTermClick}
               id="1"
               className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 1 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]  dark:text-white"
+                term === "Net 1 Day"
+                  ? "text-[#7C5DFA]"
+                  : "text-[#0C0E16]  dark:text-white"
               } `}
             >
               Net 1 Day
@@ -422,7 +439,9 @@ function NewInvoice(props: {
               onClick={handleTermClick}
               id="7"
               className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 7 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white"
+                term === "Net 7 Day"
+                  ? "text-[#7C5DFA]"
+                  : "text-[#0C0E16] dark:text-white"
               } `}
             >
               Net 7 Days
@@ -431,7 +450,9 @@ function NewInvoice(props: {
               onClick={handleTermClick}
               id="14"
               className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 14 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white"
+                term === "Net 14 Day"
+                  ? "text-[#7C5DFA]"
+                  : "text-[#0C0E16] dark:text-white"
               } `}
             >
               Net 14 Day
@@ -440,7 +461,9 @@ function NewInvoice(props: {
               onClick={handleTermClick}
               id="30"
               className={`border-b-[#DFE3FA] dark:border-b-[#1E2139] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 30 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white "
+                term === "Net 30 Day"
+                  ? "text-[#7C5DFA]"
+                  : "text-[#0C0E16] dark:text-white "
               } `}
             >
               Net 30 Day
@@ -459,7 +482,9 @@ function NewInvoice(props: {
             id="Description"
             {...register("description", { required: true })}
             className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
-              errors && errors.description ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
+              errors && errors.description
+                ? "border-[red]"
+                : "border-[#DFE3FA] dark:border-[#252945]"
             } `}
           />
         </div>
@@ -547,7 +572,7 @@ function NewInvoice(props: {
                       id={`Total${index}`}
                       value={updateTotal(index)}
                       readOnly
-                      className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] " 
+                      className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] "
                     />
                   </div>
                   <div
@@ -577,7 +602,10 @@ function NewInvoice(props: {
           <button className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12 dark:bg-[#252945]">
             Discard
           </button>
-          <button onClick={submitDraft} className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]">
+          <button
+            onClick={submitDraft}
+            className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]"
+          >
             Save as Draft
           </button>
           <button

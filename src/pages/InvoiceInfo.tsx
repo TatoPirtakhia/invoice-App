@@ -64,9 +64,9 @@ function InvoiceInfo(props: {
   };
 
   return (
-    <div className="w-full bg-[#F8F8FB] flex flex-col items-center">
+    <div className="w-full bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]">
       {showDeleteWindow && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 dark:bg-[#141625] dark:bg-opacity-80 bg-opacity-50">
           <ConfirmDelete
             id={data.id}
             setShowDeleteWindow={setShowDeleteWindow}
@@ -76,7 +76,7 @@ function InvoiceInfo(props: {
         </div>
       )}
       {data ? (
-        <div className="w-full bg-[#F8F8FB] flex flex-col items-center">
+        <div className="w-full bg-[#F8F8FB] flex flex-col items-center  dark:bg-[#141625]">
           <div className="w-[86.51%] pt-[100px] flex flex-col items-start">
             <div
               className="flex items-center gap-2 mb-8"
@@ -85,9 +85,9 @@ function InvoiceInfo(props: {
               }}
             >
               <ArrowLeft />
-              <p className="spartan font-bold text-[15px]">Go Back</p>
+              <p className="spartan font-bold text-[15px] dark:text-white">Go Back</p>
             </div>
-            <div className="flex items-center justify-between w-full p-6 bg-white mb-4 rounded-[8px]">
+            <div className="flex items-center justify-between w-full p-6 bg-white mb-4 rounded-[8px] dark:bg-[#1E2139]">
               <p className="spartan font-medium text-[#858BB2]  text-[17px] ">
                 Status
               </p>
@@ -124,46 +124,46 @@ function InvoiceInfo(props: {
                 </p>
               </div>
             </div>
-            <div className="w-full flex flex-col items-start bg-white pt-6 pl-6 rounded-[8px]">
+            <div className="w-full flex flex-col items-start bg-white pt-6 pl-6 rounded-[8px] dark:bg-[#1E2139]">
               <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white">
                 <span className="spartan font-bold text-[#7E88C3] text-[16px]">
                   #
                 </span>
                 {`${data.id}`}
               </p>
-              <p className="spartan font-medium text-[#7E88C3] text-[18px] mt-[-5px] mb-8">
+              <p className="spartan font-medium text-[#7E88C3] text-[18px] mt-[-5px] mb-8 dark:text-[#DFE3FA]">
                 {data.description}
               </p>
 
-              <p className="spartan font-medium text-[18px] text-[#7E88C3] ">
+              <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                 {data.senderAddress.street}
               </p>
-              <p className="spartan font-medium text-[18px] text-[#7E88C3] ">
+              <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                 {data.senderAddress.city}
               </p>
-              <p className="spartan font-medium text-[18px] text-[#7E88C3] ">
+              <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                 {data.senderAddress.postCode}
               </p>
-              <p className="spartan font-medium text-[18px] text-[#7E88C3] ">
+              <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                 {data.senderAddress.country}
               </p>
               <div className="mt-8 flex w-full gap-4">
                 <div className="">
                   <div>
-                    <p className="spartan font-medium text-[18px] text-[#7E88C3]">
+                    <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                       Invoice Date
                     </p>
-                    <h1 className="spartan text-[20px] font-bold ">
+                    <h1 className="spartan text-[20px] font-bold dark:text-white">
                       {data && data.createdAt
                         ? transformDate(data.createdAt)
                         : ""}
                     </h1>
                   </div>
                   <div className="mt-8">
-                    <p className="spartan font-medium text-[18px] text-[#7E88C3]">
+                    <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                       Payment Due
                     </p>
-                    <h1 className="spartan text-[20px] font-bold  tracking-[-0.3px]">
+                    <h1 className="spartan text-[20px] font-bold  tracking-[-0.3px] dark:text-white">
                       {data && data.paymentDue
                         ? transformDate(data.paymentDue)
                         : ""}
@@ -171,35 +171,35 @@ function InvoiceInfo(props: {
                   </div>
                 </div>
                 <div>
-                  <p className="spartan font-medium text-[18px] text-[#7E88C3]">
+                  <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                     Bill To
                   </p>
-                  <h1 className="spartan text-[20px] font-bold  ">
+                  <h1 className="spartan text-[20px] font-bold  dark:text-white">
                     {data.clientName}
                   </h1>
-                  <p className="spartan font-medium text-[18px] tracking-[-0.3px]   text-[#7E88C3] ">
+                  <p className="spartan font-medium text-[18px] tracking-[-0.3px]   text-[#7E88C3] dark:text-[#DFE3FA]">
                     {data.clientAddress.street}
                   </p>
-                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] ">
+                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] dark:text-[#DFE3FA] ">
                     {data.clientAddress.city}
                   </p>
-                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] ">
+                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] dark:text-[#DFE3FA]">
                     {data.clientAddress.postCode}
                   </p>
-                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] ">
+                  <p className="spartan font-medium text-[18px] tracking-[-0.3px] mt-[-7px] text-[#7E88C3] dark:text-[#DFE3FA] ">
                     {data.clientAddress.country}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col gap-2 mt-9 mb-10">
-                <p className="spartan font-medium text-[18px] text-[#7E88C3]">
+                <p className="spartan font-medium text-[18px] text-[#7E88C3] dark:text-[#DFE3FA]">
                   Sent to
                 </p>
-                <p className="spartan text-[20px] font-bold  tracking-[-0.3px]">
+                <p className="spartan text-[20px] font-bold  tracking-[-0.3px] dark:text-white">
                   {data.clientEmail}
                 </p>
               </div>
-              <div className="p-6 w-[93%] bg-[#F9FAFE]">
+              <div className="p-6 w-[93%] bg-[#F9FAFE] dark:bg-[#252945]">
                 {data.items.map((item: item) => {
                   return (
                     <div
@@ -207,17 +207,17 @@ function InvoiceInfo(props: {
                       className="flex w-full justify-between items-center mb-6"
                     >
                       <div className="flex flex-col">
-                        <h1 className="spartan text-[17px] font-bold  tracking-[-0.3px]">
+                        <h1 className="spartan text-[17px] font-bold  tracking-[-0.3px] dark:text-white">
                           {item.name}
                         </h1>
-                        <p className="spartan font-medium text-[17px] text-[#7E88C3]">{`${item.quantity} x £ ${item.price}.00`}</p>
+                        <p className="spartan font-medium text-[17px] text-[#7E88C3] dark:text-[#888EB0]">{`${item.quantity} x £ ${item.price}.00`}</p>
                       </div>
-                      <p className="spartan text-[17px] font-bold  tracking-[-0.3px]">{`£ ${item.total}.00`}</p>
+                      <p className="spartan text-[17px] font-bold  tracking-[-0.3px] dark:text-white">{`£ ${item.total}.00`}</p>
                     </div>
                   );
                 })}
               </div>
-              <div className="w-[93%] bg-[#373B53] mb-6 p-6 flex items-center justify-between rounded-b-lg">
+              <div className="w-[93%] bg-[#373B53] mb-6 p-6 flex items-center justify-between rounded-b-lg dark:bg-[#0C0E16]">
                 <p className="spartan font-medium text-white text-[15px]">
                   Grand Total
                 </p>
@@ -225,8 +225,8 @@ function InvoiceInfo(props: {
               </div>
             </div>
           </div>
-          <div className="w-full bg-white mt-[56px] p-6 flex items-center justify-around">
-            <button className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl">
+          <div className="w-full bg-white mt-[56px] p-6 flex items-center justify-around dark:bg-[#1E2139]">
+            <button className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl dark:bg-[#252945] dark:text-[#DFE3FA] spartan font-bold">
               Edit
             </button>
             <button
