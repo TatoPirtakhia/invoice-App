@@ -4,7 +4,7 @@ import { InvoiceData } from "../types";
 const sendNewInvoice = async (data: InvoiceData) => {
   console.log(data);
   await axios
-    .post("http://localhost:3000/api/NewInvoice", {
+    .post("https://invoice-app-rsqt.onrender.com/api/NewInvoice", {
       id: data.id,
       createdAt: data.createdAt,
       paymentDue: data.paymentDue,
