@@ -92,7 +92,6 @@ function NewInvoice(props: {
   };
 
   const onSubmit: SubmitHandler<Invoice> = (data) => {
-    console.log(data);
     const updatedFields = data.items.map((item) => {
       return {
         name: item.name,
@@ -117,20 +116,23 @@ function NewInvoice(props: {
       items: data.items,
       total: data.total,
     });
-    props.setInvoices([...props.invoices, {
-      id: ID,
-      createdAt: data.createdAt,
-      paymentDue: data.paymentDue,
-      description: data.description,
-      paymentTerms: data.paymentTerms,
-      clientName: data.clientName,
-      clientEmail: data.clientEmail,
-      status: data.status,
-      senderAddress: data.senderAddress,
-      clientAddress: data.clientAddress,
-      items: data.items,
-      total: data.total,
-    }]);
+    props.setInvoices([
+      ...props.invoices,
+      {
+        id: ID,
+        createdAt: data.createdAt,
+        paymentDue: data.paymentDue,
+        description: data.description,
+        paymentTerms: data.paymentTerms,
+        clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        status: data.status,
+        senderAddress: data.senderAddress,
+        clientAddress: data.clientAddress,
+        items: data.items,
+        total: data.total,
+      },
+    ]);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -141,6 +143,10 @@ function NewInvoice(props: {
     setValue("status", "pending");
     handleSubmit(onSubmit)();
   };
+  const submitDraft= () =>{
+    setValue("status", "draft");
+    handleSubmit(onSubmit)();
+  }
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     if (date) {
@@ -151,13 +157,17 @@ function NewInvoice(props: {
   };
 
   return (
-    <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 ">
+    <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
-        <div className=" fixed inset-0 flex items-center justify-center z-300 bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-300 bg-gray-800 bg-opacity-50">
           <Loading />
         </div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-4  pl-6 ">
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full mt-4  pl-6  z-0"
+      >
         <div
           className="flex items-center gap-2 mb-8"
           onClick={() => {
@@ -165,9 +175,9 @@ function NewInvoice(props: {
           }}
         >
           <ArrowLeft />
-          <p className="spartan font-bold text-[15px]">Go Back</p>
+          <p className="spartan font-bold text-[15px] dark:text-white">Go Back</p>
         </div>
-        <h1 className="spartan font-bold text-[32px]">New Invoice</h1>
+        <h1 className="spartan font-bold text-[32px] dark:text-white">New Invoice</h1>
         <p className="spartan font-bold text-[15px] text-[#7C5DFA] mb-6">
           Bill From
         </p>
@@ -180,7 +190,11 @@ function NewInvoice(props: {
         <input
           type="text"
           {...register("senderAddress.street", { required: true })}
-          className="w-[93%] h-12 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]"
+          className={`w-[93%] h-12 border-[1px]  rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px] dark:bg-[#252945] dark:text-white ${
+            errors && errors.senderAddress?.street
+              ? "border-[red]"
+              : "border-[#DFE3FA] dark:border-[#252945]"
+          }`}
         />
         <div className="flex flex-col mt-6 w-full">
           <div className="flex w-full">
@@ -195,7 +209,11 @@ function NewInvoice(props: {
                 type="text"
                 id="city"
                 {...register("senderAddress.city", { required: true })}
-                className="w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                className={`w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white  ${
+                  errors && errors.senderAddress?.city
+                    ? "border-[red]"
+                    : "border-[#DFE3FA]  dark:border-[#252945]"
+                }`}
               />
             </div>
             <div className="flex flex-col w-full">
@@ -209,7 +227,11 @@ function NewInvoice(props: {
                 type="text"
                 id="PostCode"
                 {...register("senderAddress.postCode", { required: true })}
-                className="w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                className={`w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                  errors && errors.senderAddress?.postCode
+                    ? "border-[red]"
+                    : "border-[#DFE3FA] dark:border-[#252945]"
+                }`}
               />
             </div>
           </div>
@@ -224,7 +246,11 @@ function NewInvoice(props: {
               type="text"
               id="Country"
               {...register("senderAddress.country", { required: true })}
-              className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+              className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                errors && errors.senderAddress?.country
+                  ? "border-[red]"
+                  : "border-[#DFE3FA] dark:border-[#252945]"
+              }`}
             />
           </div>
         </div>
@@ -243,7 +269,9 @@ function NewInvoice(props: {
             type="text"
             id="ClientsName"
             {...register("clientName", { required: true })}
-            className="w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]"
+            className={`w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]  dark:bg-[#252945] dark:text-white ${
+              errors && errors.clientName ? "border-[red]" : "border-[#DFE3FA]  dark:border-[#252945]"
+            }`}
           />
 
           <label
@@ -256,7 +284,9 @@ function NewInvoice(props: {
             type="email"
             id="ClientsEmail"
             {...register("clientEmail", { required: true })}
-            className="w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]"
+            className={`w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]  dark:bg-[#252945] dark:text-white ${
+              errors && errors.clientEmail ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
+            }`}
           />
 
           <label
@@ -269,7 +299,11 @@ function NewInvoice(props: {
             type="text"
             id="StreetAddress"
             {...register("clientAddress.street", { required: true })}
-            className="w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px]"
+            className={`w-[93%] h-12 mb-6 border-[1px] rounded outline-none pl-5 text-[#0C0E16] spartan font-bold text-[15px] dark:bg-[#252945] dark:text-white ${
+              errors && errors.clientAddress
+                ? "border-[red]"
+                : "border-[#DFE3FA] dark:border-[#252945]"
+            }`}
           />
           <div className="flex flex-col">
             <div className="flex">
@@ -284,7 +318,11 @@ function NewInvoice(props: {
                   type="text"
                   id="city"
                   {...register("clientAddress.city", { required: true })}
-                  className="w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                  className={`w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                    errors && errors.clientAddress?.city
+                      ? "border-[red]"
+                      : "border-[#DFE3FA] dark:border-[#252945]"
+                  }`}
                 />
               </div>
               <div className="flex flex-col w-full">
@@ -298,7 +336,11 @@ function NewInvoice(props: {
                   type="text"
                   id="PostCode"
                   {...register("clientAddress.postCode", { required: true })}
-                  className="w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                  className={`w-[85%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                    errors && errors.clientAddress?.postCode
+                      ? "border-[red]"
+                      : "border-[#DFE3FA] dark:border-[#252945]"
+                  }`}
                 />
               </div>
             </div>
@@ -313,12 +355,16 @@ function NewInvoice(props: {
                 type="text"
                 id="Country"
                 {...register("clientAddress.country", { required: true })}
-                className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                  errors && errors.clientAddress?.country
+                    ? "border-[red]"
+                    : "border-[#DFE3FA] dark:border-[#252945]"
+                }`}
               />
             </div>
           </div>
         </div>
-        <div className="relative mt-10">
+        <div className="relative mt-10 z-1">
           <label
             htmlFor="dateInput"
             className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -331,13 +377,15 @@ function NewInvoice(props: {
             onChange={handleDateChange}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select a date"
-            className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] z-0 rounded outline-none "
+            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px]  rounded outline-none  dark:bg-[#252945] dark:text-white ${
+              errors && errors.createdAt ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
+            }`}
           />
           <div className="absolute right-9 top-10">
             <Calendar />
           </div>
         </div>
-        <div className="mt-10 relative">
+        <div className="mt-10 relative z-0">
           <label
             htmlFor="Terms"
             className="spartan font-medium text-[17px] text-[#7E88C3] mb-2"
@@ -347,7 +395,11 @@ function NewInvoice(props: {
           <div
             onClick={clickTerm}
             id="Terms"
-            className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5"
+            className={`w-[93%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
+              errors && errors.paymentTerms
+                ? "border-[red]"
+                : "border-[#DFE3FA] dark:border-[#252945]"
+            }`}
           >
             <p>{term}</p>
             <ArrowDown />
@@ -355,13 +407,13 @@ function NewInvoice(props: {
           <div
             className={`${
               !showTerm ? "hidden" : ""
-            } absolute  w-[93%] bg-white shadow-term mt-6`}
+            } absolute  w-[93%] bg-white shadow-term mt-6 dark:bg-[#252945]`}
           >
             <p
               onClick={handleTermClick}
               id="1"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 1 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]"
+              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                term === "Net 1 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]  dark:text-white"
               } `}
             >
               Net 1 Day
@@ -369,8 +421,8 @@ function NewInvoice(props: {
             <p
               onClick={handleTermClick}
               id="7"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 7 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]"
+              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                term === "Net 7 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white"
               } `}
             >
               Net 7 Days
@@ -378,8 +430,8 @@ function NewInvoice(props: {
             <p
               onClick={handleTermClick}
               id="14"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 14 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]"
+              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                term === "Net 14 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white"
               } `}
             >
               Net 14 Day
@@ -387,8 +439,8 @@ function NewInvoice(props: {
             <p
               onClick={handleTermClick}
               id="30"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 30 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16]"
+              className={`border-b-[#DFE3FA] dark:border-b-[#1E2139] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
+                term === "Net 30 Day" ? "text-[#7C5DFA]" : "text-[#0C0E16] dark:text-white "
               } `}
             >
               Net 30 Day
@@ -406,7 +458,9 @@ function NewInvoice(props: {
             type="text"
             id="Description"
             {...register("description", { required: true })}
-            className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+              errors && errors.description ? "border-[red]" : "border-[#DFE3FA] dark:border-[#252945]"
+            } `}
           />
         </div>
 
@@ -429,7 +483,11 @@ function NewInvoice(props: {
                     type="text"
                     id={`itemName${index}`}
                     {...register(`items.${index}.name`, { required: true })}
-                    className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                    className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                      errors && errors.items?.[index]?.name
+                        ? "border-[red]"
+                        : "border-[#DFE3FA] dark:border-[#252945]"
+                    }`}
                   />
                 </div>
                 <div className="flex items-center mt-6">
@@ -448,7 +506,11 @@ function NewInvoice(props: {
                         valueAsNumber: true,
                         required: true,
                       })}
-                      className="pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                      className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                        errors && errors.items?.[index]?.quantity
+                          ? "border-[red]"
+                          : "border-[#DFE3FA] dark:border-[#252945]"
+                      } `}
                     />
                   </div>
                   <div className="flex flex-col w-[30%] ">
@@ -466,7 +528,11 @@ function NewInvoice(props: {
                         valueAsNumber: true,
                         required: true,
                       })}
-                      className="pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
+                      className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                        errors && errors.items?.[index]?.price
+                          ? "border-[red]"
+                          : "border-[#DFE3FA] dark:border-[#252945]"
+                      }`}
                     />
                   </div>
                   <div className="flex flex-col w-[30%] ml-4 ">
@@ -481,7 +547,7 @@ function NewInvoice(props: {
                       id={`Total${index}`}
                       value={updateTotal(index)}
                       readOnly
-                      className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none"
+                      className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] " 
                     />
                   </div>
                   <div
@@ -494,29 +560,29 @@ function NewInvoice(props: {
               </div>
             ))}
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-start w-full">
             <button
               onClick={addItem}
               type="button"
-              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px]"
+              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px] w-[93%] h-12 dark:bg-[#252945] rounded-3xl"
             >
               + Add New Item
             </button>
           </div>
         </div>
       </form>
-      <div>
+      <div className="w-full">
         <div className="w-full h-[64px] bg-gradient-to-b from-gradient-1 via-gradient-2  mt-10 "></div>
-        <div className="w-full flex items-center justify-around pt-[21px] pl-6 pr-6 pb-[22px] bg-white ">
-          <button className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12">
+        <div className="w-full flex items-center justify-around pt-[21px] pl-6 pr-6 pb-[22px] bg-white dark:bg-[#1E2139] ">
+          <button className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12 dark:bg-[#252945]">
             Discard
           </button>
-          <button className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12">
+          <button onClick={submitDraft} className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]">
             Save as Draft
           </button>
           <button
             onClick={submit}
-            className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12"
+            className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12 "
           >
             Save & Send
           </button>

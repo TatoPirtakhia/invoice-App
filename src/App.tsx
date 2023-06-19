@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className="min-h-[100vh] bg-[#F8F8FB] dark:bg-[#141625] flex flex-col items-center">
-      <nav className="w-full h-[72px] bg-navColor flex items-center justify-between fixed z-50">
+      <nav className="w-full h-[72px] bg-navColor dark:bg-[#1E2139] flex items-center justify-between fixed z-50">
         <div className="flex items-end  w-[72px] h-full bg-[#7C5DFA] rounded-tr-[20px] rounded-br-[20px] ">
           <div className="custom-style bg-[#9277FF] h-[35px] w-[72px] relative ">
             <div className="absolute top-[-13px] left-6">
