@@ -4,24 +4,29 @@ import {
   useFieldArray,
   useWatch,
 } from "react-hook-form";
-import ArrowLeft from "../assets/icon-arrow-left";
-import { Invoice } from "../types";
-import invoiceSchema from "../schema/invoiceSchema";
-import { useState } from "react";
+import ArrowLeft from "../../assets/icon-arrow-left";
+import { Invoice, InvoiceData } from "../../types";
+import invoiceSchema from "../../schema/invoiceSchema";
+import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import Calendar from "../assets/icon-calendar";
-import ArrowDown from "../assets/icon-arrow-down";
-import Delete from "../assets/icon-delete";
+import Calendar from "../../assets/icon-calendar";
+import ArrowDown from "../../assets/icon-arrow-down";
+import Delete from "../../assets/icon-delete";
 import ReactDatePicker from "react-datepicker";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import sendNewInvoice from "../../requests/sendNewInvoice";
+import generateID from "./newInvoiceFunctions";
+import Loading from "../loading/Loading";
 
 function NewInvoice(props: {
   setIsNewInvoice: React.Dispatch<React.SetStateAction<boolean>>;
+  setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
+  invoices: InvoiceData[];
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [term, setTerm] = useState<string | null>("Select Payment Terms");
   const [showTerm, setShowterm] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const clickTerm = () => {
     setShowterm(!showTerm);
@@ -32,10 +37,11 @@ function NewInvoice(props: {
     register,
     handleSubmit,
     setValue,
-    // formState: { errors },
+    formState: { errors },
   } = useForm<Invoice>({
     resolver: yupResolver(invoiceSchema),
   });
+  // console.log(errors)
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
@@ -44,14 +50,26 @@ function NewInvoice(props: {
     append({ name: "", quantity: 0, price: 0, total: 0 });
   };
 
+  let count = 0;
   const watchItems = useWatch({ control, name: "items" });
   const updateTotal = (index: number) => {
     if (watchItems && index >= 0 && index < watchItems.length) {
       const { quantity, price } = watchItems[index];
-      const total = quantity * price;
-      return total.toFixed(2);
+      const totalPrice = quantity * price;
+      count = count + totalPrice;
+      setValue("total", count);
+      return totalPrice.toFixed(2);
     }
     return 0;
+  };
+  const removeItem = (index: number) => {
+    const removeTotal = updateTotal(index);
+    const parsedTotal =
+      typeof removeTotal === "string" ? parseInt(removeTotal) : 0;
+    count = count - parsedTotal * 2;
+
+    setValue("total", count);
+    remove(index);
   };
 
   const handleTermClick = (event: React.MouseEvent<HTMLParagraphElement>) => {
@@ -59,25 +77,87 @@ function NewInvoice(props: {
     const id = parseInt(event.currentTarget.id);
     setTerm(clickedTerm);
     setShowterm(false);
-    setValue("paymentTerms", id);
+
+    if (selectedDate) {
+      const newDate = new Date(selectedDate);
+      newDate.setDate(newDate.getDate() + id);
+
+      const formattedDateDue = newDate.toLocaleDateString("en-GB");
+
+      setValue("paymentDue", formattedDateDue);
+      setValue("paymentTerms", id);
+    } else {
+      console.log("selectedDate is null");
+    }
   };
 
-  const onSubmit: SubmitHandler<Invoice> = (data:Invoice) => {
-    console.log(data.clientName)
+  const onSubmit: SubmitHandler<Invoice> = (data) => {
+    console.log(data);
+    const updatedFields = data.items.map((item) => {
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.price * item.quantity,
+      };
+    });
+    data.items = updatedFields;
+    const ID = generateID();
+    sendNewInvoice({
+      id: ID,
+      createdAt: data.createdAt,
+      paymentDue: data.paymentDue,
+      description: data.description,
+      paymentTerms: data.paymentTerms,
+      clientName: data.clientName,
+      clientEmail: data.clientEmail,
+      status: data.status,
+      senderAddress: data.senderAddress,
+      clientAddress: data.clientAddress,
+      items: data.items,
+      total: data.total,
+    });
+    props.setInvoices([...props.invoices, {
+      id: ID,
+      createdAt: data.createdAt,
+      paymentDue: data.paymentDue,
+      description: data.description,
+      paymentTerms: data.paymentTerms,
+      clientName: data.clientName,
+      clientEmail: data.clientEmail,
+      status: data.status,
+      senderAddress: data.senderAddress,
+      clientAddress: data.clientAddress,
+      items: data.items,
+      total: data.total,
+    }]);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      props.setIsNewInvoice(false);
+    }, 5000);
   };
   const submit = () => {
+    setValue("status", "pending");
     handleSubmit(onSubmit)();
   };
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
+    if (date) {
+      const newDate = new Date(date);
+      const formattedDate = newDate.toLocaleDateString("en-GB");
+      setValue("createdAt", formattedDate);
+    }
   };
 
   return (
     <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 ">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full mt-4  pl-6 "
-      >
+      {isLoading && (
+        <div className=" fixed inset-0 flex items-center justify-center z-300 bg-gray-800 bg-opacity-50">
+          <Loading />
+        </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-4  pl-6 ">
         <div
           className="flex items-center gap-2 mb-8"
           onClick={() => {
@@ -247,12 +327,11 @@ function NewInvoice(props: {
           </label>
           <ReactDatePicker
             id="dateInput"
-            {...register("createdAt", { required: true })}
             selected={selectedDate}
             onChange={handleDateChange}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select a date"
-            className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none "
+            className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] z-0 rounded outline-none "
           />
           <div className="absolute right-9 top-10">
             <Calendar />
@@ -318,15 +397,15 @@ function NewInvoice(props: {
         </div>
         <div className="flex flex-col mt-6">
           <label
-            htmlFor="Country"
+            htmlFor="Description"
             className="spartan font-medium text-[17px] text-[#7E88C3]"
           >
             Project Description
           </label>
           <input
             type="text"
-            id="Country"
-            {...register("clientAddress.country", { required: true })}
+            id="Description"
+            {...register("description", { required: true })}
             className="w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
           />
         </div>
@@ -346,6 +425,7 @@ function NewInvoice(props: {
                     Item Name
                   </label>
                   <input
+                    key={item.id}
                     type="text"
                     id={`itemName${index}`}
                     {...register(`items.${index}.name`, { required: true })}
@@ -361,9 +441,11 @@ function NewInvoice(props: {
                       Qty.
                     </label>
                     <input
+                      key={item.id}
                       type="number"
                       id={`Qty${index}`}
-                      {...register(`items.${index}.quantity`, {
+                      {...register(`items.${index}.quantity` as const, {
+                        valueAsNumber: true,
                         required: true,
                       })}
                       className="pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
@@ -377,9 +459,13 @@ function NewInvoice(props: {
                       Price
                     </label>
                     <input
+                      key={item.id}
                       type="number"
                       id={`Price${index}`}
-                      {...register(`items.${index}.price`, { required: true })}
+                      {...register(`items.${index}.price` as const, {
+                        valueAsNumber: true,
+                        required: true,
+                      })}
                       className="pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none"
                     />
                   </div>
@@ -391,7 +477,7 @@ function NewInvoice(props: {
                       Total
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       id={`Total${index}`}
                       value={updateTotal(index)}
                       readOnly
@@ -399,7 +485,7 @@ function NewInvoice(props: {
                     />
                   </div>
                   <div
-                    onClick={() => remove(index)}
+                    onClick={() => removeItem(index)}
                     className="flex items-center pt-7"
                   >
                     <Delete />
@@ -411,22 +497,29 @@ function NewInvoice(props: {
           <div className="flex justify-center">
             <button
               onClick={addItem}
-              type='button'
+              type="button"
               className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px]"
             >
               + Add New Item
             </button>
           </div>
         </div>
-
-        
       </form>
       <div>
         <div className="w-full h-[64px] bg-gradient-to-b from-gradient-1 via-gradient-2  mt-10 "></div>
         <div className="w-full flex items-center justify-around pt-[21px] pl-6 pr-6 pb-[22px] bg-white ">
-            <button className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12">Discard</button>
-            <button className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12">Save as Draft</button>
-            <button onClick={submit} className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12">Save & Send</button>
+          <button className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12">
+            Discard
+          </button>
+          <button className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12">
+            Save as Draft
+          </button>
+          <button
+            onClick={submit}
+            className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12"
+          >
+            Save & Send
+          </button>
         </div>
       </div>
     </div>

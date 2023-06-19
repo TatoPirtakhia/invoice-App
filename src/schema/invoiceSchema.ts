@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
 
 const invoiceSchema = Yup.object().shape({
-  createdAt: Yup.date().required('Created at is required'),
-  paymentDue: Yup.date().required('Payment due date is required'),
+  createdAt: Yup.string().required('Created at is required'),
   description: Yup.string().required('Description is required'),
   paymentTerms: Yup.number().required('Payment terms is required'),
   clientName: Yup.string().required('Client name is required'),
@@ -23,11 +22,19 @@ const invoiceSchema = Yup.object().shape({
   items: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required('Item name is required'),
-      quantity: Yup.number().required('Item quantity is required'),
-      price: Yup.number().required('Item price is required'),
+      quantity: Yup.number()
+        .typeError("Quantity must be a number")
+        .required("Quantity is required")
+        .positive("Quantity must be a positive number"),
+      price: Yup
+        .number()
+        .typeError("Price must be a number")
+        .required("Price is required")
+        .positive("Price must be a positive number"),
       total: Yup.number().required('Item total is required'),
     })
   ),
+
 });
 
 export default invoiceSchema

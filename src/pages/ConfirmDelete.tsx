@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom"
 import deleteInvoice from "../requests/delete"
+import { InvoiceData } from "../types"
 
 function ConfirmDelete(props:{
     id: string
     setShowDeleteWindow: React.Dispatch<React.SetStateAction<boolean>>
+    setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>
+    invoices: InvoiceData[]
 }) {
     const navigate = useNavigate()
     const cancel = () =>{
@@ -11,6 +14,13 @@ function ConfirmDelete(props:{
     }
     const deleteinvoice = async () =>{
         await deleteInvoice(props.id)
+        const updatedObjects = [...props.invoices];
+        const index = updatedObjects.findIndex(obj => obj.id === props.id);
+        if (index !== -1) {
+          updatedObjects.splice(index, 1);
+          props.setInvoices(updatedObjects)
+        }
+
         props.setShowDeleteWindow(false)
         navigate("/home");
       }

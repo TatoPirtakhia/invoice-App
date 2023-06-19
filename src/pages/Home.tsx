@@ -3,14 +3,18 @@ import Plus from "../assets/icon-plus";
 import { InvoiceData } from "../types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NewInvoice from "./NewInvoice";
+import NewInvoice from "./NewInvoice/NewInvoice";
 import transformDate from "../controller/dateTransform";
 
 interface CheckedItems {
   [key: string]: boolean;
 }
 
-function Home(props: { invoices: InvoiceData[]; dark: boolean }) {
+function Home(props: {
+  invoices: InvoiceData[];
+  dark: boolean;
+  setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
+}) {
   const [isNewInvoice, setIsNewInvoice] = useState<boolean>(false);
 
   const [checkedItems, setCheckedItems] = useState<CheckedItems>({});
@@ -138,7 +142,7 @@ function Home(props: { invoices: InvoiceData[]; dark: boolean }) {
         </div>
       </div>
       <div className="absolute z-10 top-0 w-full left-0">
-        {!isNewInvoice ? "" : <NewInvoice setIsNewInvoice={setIsNewInvoice} />}
+        {!isNewInvoice ? "" : <NewInvoice setIsNewInvoice={setIsNewInvoice} setInvoices={props.setInvoices} invoices={props.invoices} />}
       </div>
       {invoicesData.map((data: InvoiceData) => {
         return (

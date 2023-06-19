@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 import ConfirmDelete from "./ConfirmDelete";
 import transformDate from "../controller/dateTransform";
 
-function InvoiceInfo(props: { invoices: InvoiceData[] }) {
+function InvoiceInfo(props: {
+  invoices: InvoiceData[];
+  setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
+}) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<InvoiceData>({
     id: "",
-    createdAt: new Date() ,
-    paymentDue: new Date(),
+    createdAt: "",
+    paymentDue: "",
     description: "",
     paymentTerms: 0,
     clientName: "",
@@ -45,7 +48,12 @@ function InvoiceInfo(props: { invoices: InvoiceData[] }) {
       setData((prevState) => {
         return { ...prevState, status: "paid" };
       });
-
+      const updatedInvoices = [...props.invoices];
+      const index = updatedInvoices.findIndex((invoice) => invoice.id === id);
+      if (index !== -1) {
+        updatedInvoices[index].status = 'paid';
+        props.setInvoices(updatedInvoices);
+      }
       const updatedData = { ...data, status: "paid" };
       await editInvoice(updatedData);
     }
@@ -62,6 +70,8 @@ function InvoiceInfo(props: { invoices: InvoiceData[] }) {
           <ConfirmDelete
             id={data.id}
             setShowDeleteWindow={setShowDeleteWindow}
+            setInvoices={props.setInvoices}
+            invoices={props.invoices}
           />
         </div>
       )}

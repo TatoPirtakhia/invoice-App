@@ -1,7 +1,7 @@
 
 export type Invoice = {
-  createdAt:  Date ;
-  paymentDue:  Date;
+  createdAt:  string ;
+  paymentDue:string;
   description: string;
   paymentTerms: number;
   clientName: string;
@@ -25,11 +25,12 @@ export type Invoice = {
     price: number;
     total: number;
   }[];
+  total: number;
 }
 export type InvoiceData = {
     id: string;
-    createdAt: Date  ;
-    paymentDue:Date;
+    createdAt: string  ;
+    paymentDue:string;
     description: string;
     paymentTerms: number;
     clientName: string;
@@ -64,3 +65,8 @@ export type InvoiceData = {
     total: number;
   }
   
+  export interface Item {
+    quantity: number;
+    price: number;
+    total: number;
+  }

@@ -61,11 +61,11 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route
           path="/home"
-          element={<Home invoices={invoices} dark={dark} />}
+          element={<Home invoices={invoices} setInvoices={setInvoices} dark={dark} />}
         />
         <Route
           path="/InvoiceInfo/:id"
-          element={<InvoiceInfo invoices={invoices} />}
+          element={<InvoiceInfo invoices={invoices} setInvoices={setInvoices}/>}
         />
       </Routes>
     </div>
