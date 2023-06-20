@@ -1,33 +1,43 @@
+import { useEffect, useState } from "react";
 import {
   useForm,
   SubmitHandler,
   useFieldArray,
   useWatch,
 } from "react-hook-form";
-import ArrowLeft from "../../assets/icon-arrow-left";
-import { Invoice, InvoiceData } from "../../types";
-import invoiceSchema from "../../schema/invoiceSchema";
-import React, { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import Calendar from "../../assets/icon-calendar";
-import ArrowDown from "../../assets/icon-arrow-down";
-import Delete from "../../assets/icon-delete";
-import ReactDatePicker from "react-datepicker";
+import { Invoice, InvoiceData } from "../types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import sendNewInvoice from "../../requests/sendNewInvoice";
-import generateID from "./newInvoiceFunctions";
-import Loading from "../loading/Loading";
+import invoiceSchema from "../schema/invoiceSchema";
+import Loading from "./loading/Loading";
+import ArrowLeft from "../assets/icon-arrow-left";
+import Calendar from "../assets/icon-calendar";
+import ArrowDown from "../assets/icon-arrow-down";
+import Delete from "../assets/icon-delete";
+import transformDate from "../controller/dateTransform";
+import editInvoice from "../requests/editInvoice";
 
-function NewInvoice(props: {
-  setIsNewInvoice: React.Dispatch<React.SetStateAction<boolean>>;
-  setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
+function EditInvoice(props: {
+  data: InvoiceData;
   invoices: InvoiceData[];
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  setData: React.Dispatch<React.SetStateAction<InvoiceData>>;
+  setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
 }) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [term, setTerm] = useState<string | null>("Select Payment Terms");
+  const [selectedDate, _setSelectedDate] = useState<string>(
+    props.data.createdAt
+  );
+  const Term = `${
+    props.data.paymentTerms === 1
+      ? "Net 1 Day"
+      : props.data.paymentTerms === 7
+      ? "Net 7 Day"
+      : props.data.paymentTerms === 14
+      ? "Net 14 Day"
+      : "Net 30 Day"
+  }`;
+  const [term, setTerm] = useState<string | null>(Term);
   const [showTerm, setShowterm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const clickTerm = () => {
     setShowterm(!showTerm);
@@ -42,6 +52,18 @@ function NewInvoice(props: {
   } = useForm<Invoice>({
     resolver: yupResolver(invoiceSchema),
   });
+  useEffect(() => {
+    setValue("createdAt", props.data.createdAt);
+    setValue("description", props.data.description);
+    setValue("paymentTerms", props.data.paymentTerms);
+    setValue("clientName", props.data.clientName);
+    setValue("clientEmail", props.data.clientEmail);
+    setValue("status", props.data.status);
+    setValue("senderAddress", props.data.senderAddress);
+    setValue("clientAddress", props.data.clientAddress);
+    setValue("items", props.data.items);
+    setValue("total", props.data.total);
+  }, []);
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
@@ -75,20 +97,19 @@ function NewInvoice(props: {
   const handleTermClick = (event: React.MouseEvent<HTMLParagraphElement>) => {
     const clickedTerm = event.currentTarget.textContent;
     const id = parseInt(event.currentTarget.id);
+
     setTerm(clickedTerm);
     setShowterm(false);
     setValue("paymentTerms", id);
   };
 
   const onSubmit: SubmitHandler<Invoice> = (data) => {
-    if (selectedDate) {
-      const newDate = new Date(selectedDate);
-      newDate.setDate(newDate.getDate() + data.paymentTerms);
+    const newDate = new Date(props.data.createdAt);
+    newDate.setDate(newDate.getDate() + data.paymentTerms);
 
-      const formattedDateDue = newDate.toLocaleDateString("en-GB");
+    const formattedDateDue = newDate.toLocaleDateString("en-GB");
+    setValue("paymentDue", formattedDateDue);
 
-      setValue("paymentDue", formattedDateDue);
-    }
     const updatedFields = data.items.map((item) => {
       return {
         name: item.name,
@@ -98,9 +119,53 @@ function NewInvoice(props: {
       };
     });
     data.items = updatedFields;
-    const ID = generateID();
-    sendNewInvoice({
-      id: ID,
+
+    props.setData((prevState) => {
+      return {
+        ...prevState,
+        createdAt: data.createdAt,
+        paymentDue: data.paymentDue,
+        description: data.description,
+        paymentTerms: data.paymentTerms,
+        clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        status: data.status,
+        senderAddress: data.senderAddress,
+        clientAddress: data.clientAddress,
+        items: data.items,
+        total: data.total,
+      };
+    });
+    const updatedInvoices = [...props.invoices];
+    const index = updatedInvoices.findIndex(
+      (invoice) => invoice.id === props.data.id
+    );
+    if (index !== -1) {
+      updatedInvoices[index].createdAt = data.createdAt;
+      updatedInvoices[index].paymentDue = data.paymentDue;
+      updatedInvoices[index].description = data.description;
+      updatedInvoices[index].paymentTerms = data.paymentTerms;
+      updatedInvoices[index].clientName = data.clientName;
+      updatedInvoices[index].clientEmail = data.clientEmail;
+      updatedInvoices[index].status = data.status;
+      updatedInvoices[index].senderAddress = data.senderAddress;
+      updatedInvoices[index].clientAddress = data.clientAddress;
+      updatedInvoices[index].items = data.items;
+      updatedInvoices[index].total = data.total;
+      props.setInvoices(updatedInvoices);
+    }
+
+    if (selectedDate) {
+      const newDate = new Date(selectedDate);
+      newDate.setDate(newDate.getDate() + data.paymentTerms);
+
+      const formattedDateDue = newDate.toLocaleDateString("en-GB");
+
+      setValue("paymentDue", formattedDateDue);
+    }
+
+    editInvoice({
+      id: props.data.id,
       createdAt: data.createdAt,
       paymentDue: data.paymentDue,
       description: data.description,
@@ -113,44 +178,15 @@ function NewInvoice(props: {
       items: data.items,
       total: data.total,
     });
-    props.setInvoices([
-      ...props.invoices,
-      {
-        id: ID,
-        createdAt: data.createdAt,
-        paymentDue: data.paymentDue,
-        description: data.description,
-        paymentTerms: data.paymentTerms,
-        clientName: data.clientName,
-        clientEmail: data.clientEmail,
-        status: data.status,
-        senderAddress: data.senderAddress,
-        clientAddress: data.clientAddress,
-        items: data.items,
-        total: data.total,
-      },
-    ]);
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      props.setIsNewInvoice(false);
-    }, 5000);
+      props.setIsEdit(false);
+    }, 2000);
   };
   const submit = () => {
-    setValue("status", "pending");
     handleSubmit(onSubmit)();
-  };
-  const submitDraft = () => {
-    setValue("status", "draft");
-    handleSubmit(onSubmit)();
-  };
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-    if (date) {
-      const newDate = new Date(date);
-      const formattedDate = newDate.toLocaleDateString("en-GB");
-      setValue("createdAt", formattedDate);
-    }
   };
 
   return (
@@ -167,9 +203,7 @@ function NewInvoice(props: {
       >
         <div
           className="flex items-center gap-2 mb-8"
-          onClick={() => {
-            props.setIsNewInvoice(false);
-          }}
+          onClick={() => props.setIsEdit(false)}
         >
           <ArrowLeft />
           <p className="spartan font-bold text-[15px] dark:text-white">
@@ -177,7 +211,8 @@ function NewInvoice(props: {
           </p>
         </div>
         <h1 className="spartan font-bold text-[32px] dark:text-white">
-          New Invoice
+          Edit <span className="text-[#888EB0]">#</span>
+          {`${props.data.id}`}
         </h1>
         <p className="spartan font-bold text-[15px] text-[#7C5DFA] mb-6">
           Bill From
@@ -376,20 +411,16 @@ function NewInvoice(props: {
           >
             Invoice Date
           </label>
-          <ReactDatePicker
+          <p
             id="dateInput"
-            selected={selectedDate}
-            onChange={handleDateChange}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select a date"
-            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+            className={`w-[93%] pl-5 text-[#0C0E16] pt-3 spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
               errors && errors.createdAt
                 ? "border-[red]"
                 : " dark:border-[#252945]"
-            } ${isOpen ? " border-[#7C5DFA] " : "border-[#DFE3FA] "}`}
-            onCalendarOpen={() => setIsOpen(true)}
-            onCalendarClose={() => setIsOpen(false)}
-          />
+            } `}
+          >
+            {transformDate(props.data.createdAt)}
+          </p>
           <div className="absolute right-9 top-10">
             <Calendar />
           </div>
@@ -596,26 +627,18 @@ function NewInvoice(props: {
       </form>
       <div className="w-full">
         <div className="w-full h-[64px] bg-gradient-to-b from-gradient-1 via-gradient-2  mt-10 "></div>
-        <div className="w-full flex items-center justify-around pt-[21px] pl-6 pr-6 pb-[22px] bg-white dark:bg-[#1E2139] ">
+        <div className="w-full flex items-center justify-end gap-4 pt-[21px] pl-6 pr-6 pb-[22px] bg-white dark:bg-[#1E2139] ">
           <button
-            onClick={() => {
-              props.setIsNewInvoice(false);
-            }}
-            className="spartan font-bold text-[15px] bg-[#F9FAFE] text-[#7E88C3] rounded-3xl w-[84px] h-12 dark:bg-[#252945]"
-          >
-            Discard
-          </button>
-          <button
-            onClick={submitDraft}
+            onClick={() => props.setIsEdit(false)}
             className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]"
           >
-            Save as Draft
+            Cancel
           </button>
           <button
             onClick={submit}
             className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12 "
           >
-            Save & Send
+            Save Changes
           </button>
         </div>
       </div>
@@ -623,4 +646,4 @@ function NewInvoice(props: {
   );
 }
 
-export default NewInvoice;
+export default EditInvoice;

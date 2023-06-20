@@ -5,6 +5,7 @@ import editInvoice from "../requests/editInvoice";
 import { useEffect, useState } from "react";
 import ConfirmDelete from "./ConfirmDelete";
 import transformDate from "../controller/dateTransform";
+import EditInvoice from "./EditIvoice";
 
 function InvoiceInfo(props: {
   invoices: InvoiceData[];
@@ -12,6 +13,7 @@ function InvoiceInfo(props: {
 }) {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const [data, setData] = useState<InvoiceData>({
     id: "",
     createdAt: "",
@@ -51,7 +53,7 @@ function InvoiceInfo(props: {
       const updatedInvoices = [...props.invoices];
       const index = updatedInvoices.findIndex((invoice) => invoice.id === id);
       if (index !== -1) {
-        updatedInvoices[index].status = 'paid';
+        updatedInvoices[index].status = "paid";
         props.setInvoices(updatedInvoices);
       }
       const updatedData = { ...data, status: "paid" };
@@ -77,6 +79,9 @@ function InvoiceInfo(props: {
       )}
       {data ? (
         <div className="w-full bg-[#F8F8FB] flex flex-col items-center  dark:bg-[#141625]">
+          <div className="absolute z-10 top-0 w-full left-0">
+            {!isEdit ? "" : <EditInvoice  data={data} invoices={props.invoices} setInvoices={props.setInvoices} setData={setData} setIsEdit={setIsEdit}/>}
+          </div>
           <div className="w-[86.51%] pt-[100px] flex flex-col items-start">
             <div
               className="flex items-center gap-2 mb-8"
@@ -85,7 +90,9 @@ function InvoiceInfo(props: {
               }}
             >
               <ArrowLeft />
-              <p className="spartan font-bold text-[15px] dark:text-white">Go Back</p>
+              <p className="spartan font-bold text-[15px] dark:text-white">
+                Go Back
+              </p>
             </div>
             <div className="flex items-center justify-between w-full p-6 bg-white mb-4 rounded-[8px] dark:bg-[#1E2139]">
               <p className="spartan font-medium text-[#858BB2]  text-[17px] ">
@@ -226,7 +233,10 @@ function InvoiceInfo(props: {
             </div>
           </div>
           <div className="w-full bg-white mt-[56px] p-6 flex items-center justify-around dark:bg-[#1E2139]">
-            <button className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl dark:bg-[#252945] dark:text-[#DFE3FA] spartan font-bold">
+            <button
+              onClick={() => setIsEdit(true)}
+              className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl dark:bg-[#252945] dark:text-[#DFE3FA] spartan font-bold"
+            >
               Edit
             </button>
             <button

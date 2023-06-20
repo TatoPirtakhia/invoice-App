@@ -3,7 +3,7 @@ import deleteInvoice from "../requests/delete"
 import { InvoiceData } from "../types"
 
 function ConfirmDelete(props:{
-    id: string
+    id: string | undefined
     setShowDeleteWindow: React.Dispatch<React.SetStateAction<boolean>>
     setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>
     invoices: InvoiceData[]
@@ -13,7 +13,7 @@ function ConfirmDelete(props:{
         props.setShowDeleteWindow(false)
     }
     const deleteinvoice = async () =>{
-        await deleteInvoice(props.id)
+       
         const updatedObjects = [...props.invoices];
         const index = updatedObjects.findIndex(obj => obj.id === props.id);
         if (index !== -1) {
@@ -23,6 +23,7 @@ function ConfirmDelete(props:{
 
         props.setShowDeleteWindow(false)
         navigate("/home");
+        await deleteInvoice(props.id)
       }
 
   return (

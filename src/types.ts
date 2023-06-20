@@ -28,7 +28,7 @@ export type Invoice = {
   total: number;
 }
 export type InvoiceData = {
-    id: string;
+    id: string | undefined;
     createdAt: string  ;
     paymentDue:string;
     description: string;
