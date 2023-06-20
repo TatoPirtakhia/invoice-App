@@ -7,7 +7,7 @@ import Sun from "./assets/sun";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import InvoiceInfo from "./pages/InvoiceInfo";
-
+import Avatar from './assets/image-avatar.jpg' 
 function App() {
   const [invoices, setInvoices] = useState<InvoiceData[]>([]);
   const [dark, setDark] = useState<boolean>(false);
@@ -50,7 +50,7 @@ function App() {
           </div>
           <div className="pl-6 pr-6 pt-5 pb-5  border-l-[1px] border-l-[#494E6E]">
             <img
-              src="./src/image-avatar.jpg"
+              src={Avatar}
               className="h-[32px] w-[32px] rounded-[50%]    "
               alt="avatar"
             />
