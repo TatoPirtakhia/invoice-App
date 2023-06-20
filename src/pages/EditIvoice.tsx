@@ -48,9 +48,14 @@ function EditInvoice(props: {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<Invoice>({
     resolver: yupResolver(invoiceSchema),
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "items",
   });
   useEffect(() => {
     setValue("createdAt", props.data.createdAt);
@@ -61,13 +66,24 @@ function EditInvoice(props: {
     setValue("status", props.data.status);
     setValue("senderAddress", props.data.senderAddress);
     setValue("clientAddress", props.data.clientAddress);
-    setValue("items", props.data.items);
+    setValue("items", [...props.data.items]);
     setValue("total", props.data.total);
+    for (let index = 0; index < props.data.items.length; index++) {
+        const element = props.data.items[index];
+        append(element );
+    }
+
   }, []);
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "items",
-  });
+
+
+  
+
+  setTimeout(()=>{
+    console.log(fields)
+  },3000)
+
+  console.log(props.data)
+
   const addItem = () => {
     append({ name: "", quantity: 0, price: 0, total: 0 });
   };
