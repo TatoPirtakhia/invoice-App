@@ -48,7 +48,6 @@ function EditInvoice(props: {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<Invoice>({
     resolver: yupResolver(invoiceSchema),
