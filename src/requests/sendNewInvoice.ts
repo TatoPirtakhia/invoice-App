@@ -2,9 +2,8 @@ import axios from "axios";
 import { InvoiceData } from "../types";
 
 const sendNewInvoice = async (data: InvoiceData) => {
-  console.log(data);
-  await axios
-    .post("https://invoice-app-rsqt.onrender.com/api/NewInvoice", {
+  try {
+    const response = await axios.post("https://invoice-app-rsqt.onrender.com/api/NewInvoice", {
       id: data.id,
       createdAt: data.createdAt,
       paymentDue: data.paymentDue,
@@ -17,10 +16,12 @@ const sendNewInvoice = async (data: InvoiceData) => {
       clientAddress: data.clientAddress,
       items: data.items,
       total: data.total,
-    })
-    .then((response) => {
-      console.log(response);
     });
+
+    return response.status;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export default sendNewInvoice;

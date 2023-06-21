@@ -80,7 +80,7 @@ function NewInvoice(props: {
     setValue("paymentTerms", id);
   };
 
-  const onSubmit: SubmitHandler<Invoice> = (data) => {
+  const onSubmit: SubmitHandler<Invoice> = async (data) => {
     if (selectedDate) {
       const newDate = new Date(selectedDate);
       newDate.setDate(newDate.getDate() + data.paymentTerms);
@@ -99,7 +99,7 @@ function NewInvoice(props: {
     });
     data.items = updatedFields;
     const ID = generateID();
-    sendNewInvoice({
+    const statusCOde = await sendNewInvoice({
       id: ID,
       createdAt: data.createdAt,
       paymentDue: data.paymentDue,
@@ -113,27 +113,30 @@ function NewInvoice(props: {
       items: data.items,
       total: data.total,
     });
-    props.setInvoices([
-      ...props.invoices,
-      {
-        id: ID,
-        createdAt: data.createdAt,
-        paymentDue: data.paymentDue,
-        description: data.description,
-        paymentTerms: data.paymentTerms,
-        clientName: data.clientName,
-        clientEmail: data.clientEmail,
-        status: data.status,
-        senderAddress: data.senderAddress,
-        clientAddress: data.clientAddress,
-        items: data.items,
-        total: data.total,
-      },
-    ]);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      props.setIsNewInvoice(false);
+
+      if (statusCOde === 201) {
+        props.setInvoices([
+          ...props.invoices,
+          {
+            id: ID,
+            createdAt: data.createdAt,
+            paymentDue: data.paymentDue,
+            description: data.description,
+            paymentTerms: data.paymentTerms,
+            clientName: data.clientName,
+            clientEmail: data.clientEmail,
+            status: data.status,
+            senderAddress: data.senderAddress,
+            clientAddress: data.clientAddress,
+            items: data.items,
+            total: data.total,
+          },
+        ]);
+        props.setIsNewInvoice(false);
+      }
     }, 5000);
   };
   const submit = () => {
@@ -156,7 +159,7 @@ function NewInvoice(props: {
   return (
     <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center z-300 bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
         </div>
       )}
@@ -490,6 +493,11 @@ function NewInvoice(props: {
         <p className=" spartan font-bold text-[29px] text-[#777F98] mt-[66px] mb-5">
           Item List
         </p>
+        {errors.items && (
+          <p className="spartan text-red-700">
+            "At least one item is required"
+          </p>
+        )}
         <div className="flex flex-col ">
           <div className="flex flex-col items-center">
             {fields.map((item, index) => (

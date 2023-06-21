@@ -65,23 +65,9 @@ function EditInvoice(props: {
     setValue("status", props.data.status);
     setValue("senderAddress", props.data.senderAddress);
     setValue("clientAddress", props.data.clientAddress);
-    setValue("items", [...props.data.items]);
+    setValue("items", props.data.items);
     setValue("total", props.data.total);
-    for (let index = 0; index < props.data.items.length; index++) {
-        const element = props.data.items[index];
-        append(element );
-    }
-
   }, []);
-
-
-  
-
-  setTimeout(()=>{
-    console.log(fields)
-  },3000)
-
-  console.log(props.data)
 
   const addItem = () => {
     append({ name: "", quantity: 0, price: 0, total: 0 });
@@ -207,7 +193,7 @@ function EditInvoice(props: {
   return (
     <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center z-300 bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
         </div>
       )}
@@ -419,10 +405,10 @@ function EditInvoice(props: {
             </div>
           </div>
         </div>
-        <div className="relative mt-10 z-1">
+        <div className="relative mt-10 z-0">
           <label
             htmlFor="dateInput"
-            className="spartan font-medium text-[17px] text-[#7E88C3]"
+            className="spartan font-medium text-[17px] text-[#7E88C3] "
           >
             Invoice Date
           </label>
@@ -436,7 +422,7 @@ function EditInvoice(props: {
           >
             {transformDate(props.data.createdAt)}
           </p>
-          <div className="absolute right-9 top-10">
+          <div className="absolute right-9 top-10 z-0">
             <Calendar />
           </div>
         </div>
@@ -536,6 +522,11 @@ function EditInvoice(props: {
         <p className=" spartan font-bold text-[29px] text-[#777F98] mt-[66px] mb-5">
           Item List
         </p>
+        {errors.items && (
+          <p className="spartan text-red-700">
+            "At least one item is required"
+          </p>
+        )}
         <div className="flex flex-col ">
           <div className="flex flex-col items-center">
             {fields.map((item, index) => (

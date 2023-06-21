@@ -80,7 +80,17 @@ function InvoiceInfo(props: {
       {data ? (
         <div className="w-full bg-[#F8F8FB] flex flex-col items-center  dark:bg-[#141625]">
           <div className="absolute z-10 top-0 w-full left-0">
-            {!isEdit ? "" : <EditInvoice  data={data} invoices={props.invoices} setInvoices={props.setInvoices} setData={setData} setIsEdit={setIsEdit}/>}
+            {!isEdit ? (
+              ""
+            ) : (
+              <EditInvoice
+                data={data}
+                invoices={props.invoices}
+                setInvoices={props.setInvoices}
+                setData={setData}
+                setIsEdit={setIsEdit}
+              />
+            )}
           </div>
           <div className="w-[86.51%] pt-[100px] flex flex-col items-start">
             <div
@@ -207,10 +217,10 @@ function InvoiceInfo(props: {
                 </p>
               </div>
               <div className="p-6 w-[93%] bg-[#F9FAFE] dark:bg-[#252945]">
-                {data.items.map((item: item) => {
+                {data.items.map((item: item, index: number) => {
                   return (
                     <div
-                      key={item.name}
+                      key={`${item.name}-${index}`}
                       className="flex w-full justify-between items-center mb-6"
                     >
                       <div className="flex flex-col">
@@ -228,7 +238,9 @@ function InvoiceInfo(props: {
                 <p className="spartan font-medium text-white text-[15px]">
                   Grand Total
                 </p>
-                <p className="spartan font-bold text-[25px] text-white">{`£ ${data.total}.00`}</p>
+                <p className="spartan font-bold text-[25px] text-white">{`£ ${data.total.toFixed(
+                  2
+                )}.00`}</p>
               </div>
             </div>
           </div>
