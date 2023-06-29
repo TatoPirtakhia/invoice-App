@@ -12,6 +12,7 @@ interface CheckedItems {
 }
 
 function Home(props: {
+  screenWidth: number
   invoices: InvoiceData[];
   dark: boolean;
   setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
@@ -21,6 +22,8 @@ function Home(props: {
   const [checkedItems, setCheckedItems] = useState<CheckedItems>({});
   const [invoicesData, setInvoicesData] = useState<InvoiceData[]>([]);
   const [hidden, setHidden] = useState<boolean>(true);
+  
+ 
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkboxId = event.target.id;
@@ -160,36 +163,47 @@ function Home(props: {
       {invoicesData.length === 0 ? (
         <div className="w-full flex flex-col items-center pt-[100px]">
           <Empty />
-          <p className="mt-10 text-[#0C0E16] spartan text-[22px] font-bold dark:text-white">There is nothing here</p>
-        <p className="w-[70%] text-center spartan text-[#888EB0] dark:text-[#DFE3FA] font-medium text-[15px] mt-4">Create an invoice by clicking the <span className="font-bold">New</span> button and get started</p>
+          <p className="mt-10 text-[#0C0E16] spartan text-[22px] font-bold dark:text-white">
+            There is nothing here
+          </p>
+          <p className="w-[70%] text-center spartan text-[#888EB0] dark:text-[#DFE3FA] font-medium text-[15px] mt-4">
+            Create an invoice by clicking the{" "}
+            <span className="font-bold">New</span> button and get started
+          </p>
         </div>
       ) : (
         invoicesData.map((data: InvoiceData) => {
           return (
             <div
-              className="w-full  bg-white rounded-[8px] shadow-custom mb-4 p-6 dark:bg-[#1E2139] z-0"
+              className="w-full flex  items-start justify-between md:items-center bg-white rounded-[8px] shadow-custom mb-4 p-6 dark:bg-[#1E2139] z-0"
               id={data.id}
               onClick={clickInvoice}
               key={data.id}
             >
-              <div className="flex justify-between mb-6">
-                <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white">
+              <div className="flex flex-col items-start md:flex-row md:items-center ">
+                <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white md:mr-[27px]">
                   <span className="spartan font-bold text-[#7E88C3] text-[16px]">
                     #
                   </span>
                   {`${data.id}`}
                 </p>
-                <p className="spartan font-medium text-[#858BB2] text-[16px] dark:text-[#FFFFFF] ">
+                <div className="mt-6 flex flex-col items-start md:flex-row md:mt-0 md:justify-between md:gap-[37px] ">
+                <p className="spartan font-medium tetx-[12px] text-[#7E88C3] dark:text-[#DFE3FA] w-[85px] ">
+                  {data.paymentDue ? transformDate(data.paymentDue) : ""}
+                </p>
+                <p className={`${props.screenWidth>=768? 'hidden':''} spartan font-bold text-[18px] dark:text-[#DFE3FA]`}>{`£ ${data.total}`}</p>
+                <div className="flex justify-start">
+                <p className={` ${props.screenWidth>=768? '':'hidden'} spartan font-medium text-[#858BB2] text-[16px] dark:text-[#FFFFFF] mb-6 md:mb-0`}>
                   {data.clientName}
                 </p>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="spartan font-medium tetx-[12px] text-[#7E88C3] dark:text-[#DFE3FA]">
-                    {data.paymentDue ? transformDate(data.paymentDue) : ""}
-                  </p>
-                  <p className="spartan font-bold text-[18px] dark:text-[#DFE3FA]">{`£ ${data.total}`}</p>
                 </div>
+                </div>
+              </div>
+              <div className="flex items-start flex-col justify-between md:flex-row md:items-center md:gap-10">
+                <p className={` ${props.screenWidth>=768? 'hidden':''} spartan font-medium text-[#858BB2] text-[16px] dark:text-[#FFFFFF] mb-6 md:mb-0`}>
+                  {data.clientName}
+                </p>
+                <p className={`${props.screenWidth>=768? '':'hidden'} spartan font-bold text-[18px] dark:text-[#DFE3FA]`}>{`£ ${data.total}`}</p>
                 <div
                   className={`${
                     data.status === "paid"

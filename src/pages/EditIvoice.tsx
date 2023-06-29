@@ -191,7 +191,7 @@ function EditInvoice(props: {
   };
 
   return (
-    <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px] w-full md:w-[77.6%] bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -346,9 +346,9 @@ function EditInvoice(props: {
                 : "border-[#DFE3FA] dark:border-[#252945]"
             }`}
           />
-          <div className="flex flex-col">
-            <div className="flex">
-              <div className="flex flex-col w-full">
+          <div className="flex flex-col md:mr-0 md:flex-row md:items-center md:w-[93%] md:justify-between">
+            <div className="flex justify-between">
+              <div className="flex flex-col w-full ">
                 <label
                   htmlFor="city"
                   className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -385,7 +385,10 @@ function EditInvoice(props: {
                 />
               </div>
             </div>
-            <div className="flex flex-col mt-6">
+
+
+            <div className="flex flex-col md:items-end mt-6 md:mt-0">
+              <div className="flex flex-col items-start">
               <label
                 htmlFor="Country"
                 className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -396,16 +399,22 @@ function EditInvoice(props: {
                 type="text"
                 id="Country"
                 {...register("clientAddress.country", { required: true })}
-                className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
                   errors && errors.clientAddress?.country
                     ? "border-[red]"
                     : "border-[#DFE3FA] dark:border-[#252945]"
                 }`}
               />
+              </div>
             </div>
+
+
+
+
           </div>
         </div>
-        <div className="relative mt-10 z-0">
+        <div className="flex flex-col md:flex-row w-full md:w-[93%] md:justify-between md:gap-6">
+        <div className="relative mt-10 z-0 md:w-[50%]">
           <label
             htmlFor="dateInput"
             className="spartan font-medium text-[17px] text-[#7E88C3] "
@@ -414,7 +423,7 @@ function EditInvoice(props: {
           </label>
           <p
             id="dateInput"
-            className={`w-[93%] pl-5 text-[#0C0E16] pt-3 spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+            className={`w-[93%] md:w-full pl-5 text-[#0C0E16] pt-3 spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-[#888EB0] ${
               errors && errors.createdAt
                 ? "border-[red]"
                 : " dark:border-[#252945]"
@@ -422,11 +431,13 @@ function EditInvoice(props: {
           >
             {transformDate(props.data.createdAt)}
           </p>
-          <div className="absolute right-9 top-10 z-0">
+          <div className="absolute right-[10%] top-10 z-0">
             <Calendar />
           </div>
         </div>
-        <div className="mt-10 relative z-0">
+
+
+        <div className="mt-10 relative z-0 md:w-[50%] ">
           <label
             htmlFor="Terms"
             className="spartan font-medium text-[17px] text-[#7E88C3] mb-2"
@@ -436,7 +447,7 @@ function EditInvoice(props: {
           <div
             onClick={clickTerm}
             id="Terms"
-            className={`w-[93%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
+            className={`w-[93%] md:w-[100%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
               errors && errors.paymentTerms
                 ? "border-[red]"
                 : `${
@@ -499,6 +510,7 @@ function EditInvoice(props: {
               Net 30 Day
             </p>
           </div>
+        </div>
         </div>
         <div className="flex flex-col mt-6">
           <label
@@ -607,7 +619,7 @@ function EditInvoice(props: {
                       id={`Total${index}`}
                       value={updateTotal(index)}
                       readOnly
-                      className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] "
+                      className=" text-[#888EB0] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] "
                     />
                   </div>
                   <div

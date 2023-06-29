@@ -11,6 +11,19 @@ import Avatar from './assets/image-avatar.jpg'
 function App() {
   const [invoices, setInvoices] = useState<InvoiceData[]>([]);
   const [dark, setDark] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllInvoice();
@@ -22,8 +35,10 @@ function App() {
   useEffect(() => {
     if (dark && window.matchMedia("(prefers-color-scheme: dark)").matches) {
       document.body.classList.add("dark");
+      document.body.style.backgroundColor = "#000000";
     } else {
       document.body.classList.remove("dark");
+      document.body.style.backgroundColor = "#F8F8FB";
     }
   }, [dark]);
 
@@ -61,11 +76,11 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route
           path="/home"
-          element={<Home invoices={invoices} setInvoices={setInvoices} dark={dark} />}
+          element={<Home screenWidth={screenWidth} invoices={invoices} setInvoices={setInvoices} dark={dark} />}
         />
         <Route
           path="/InvoiceInfo/:id"
-          element={<InvoiceInfo invoices={invoices} setInvoices={setInvoices}/>}
+          element={<InvoiceInfo screenWidth={screenWidth} invoices={invoices} setInvoices={setInvoices}/>}
         />
       </Routes>
     </div>
