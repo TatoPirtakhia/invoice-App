@@ -90,6 +90,7 @@ function InvoiceInfo(props: {
                 setInvoices={props.setInvoices}
                 setData={setData}
                 setIsEdit={setIsEdit}
+                screenWidth={props.screenWidth}
               />
             )}
 

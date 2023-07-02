@@ -22,6 +22,7 @@ function EditInvoice(props: {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
   setData: React.Dispatch<React.SetStateAction<InvoiceData>>;
   setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
+  screenWidth: number;
 }) {
   const [selectedDate, _setSelectedDate] = useState<string>(
     props.data.createdAt
@@ -203,7 +204,9 @@ function EditInvoice(props: {
         className="w-full mt-4  pl-6  z-0"
       >
         <div
-          className="flex items-center gap-2 mb-8"
+          className={` flex items-center gap-2 mb-8 ${
+            props.screenWidth >= 768 ? "hidden" : ""
+          }`}
           onClick={() => props.setIsEdit(false)}
         >
           <ArrowLeft />
@@ -233,8 +236,8 @@ function EditInvoice(props: {
               : "border-[#DFE3FA] dark:border-[#252945]"
           }`}
         />
-        <div className="flex flex-col mt-6 w-full">
-          <div className="flex w-full">
+        <div className="flex flex-col md:mr-0 md:flex-row md:items-center md:w-[93%] md:justify-between mt-6">
+          <div className="flex w-full md:w-[80%]">
             <div className="flex flex-col w-full">
               <label
                 htmlFor="city"
@@ -272,7 +275,7 @@ function EditInvoice(props: {
               />
             </div>
           </div>
-          <div className="flex flex-col mt-6">
+          <div className="flex flex-col mt-6 md:mt-0">
             <label
               htmlFor="Country"
               className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -283,7 +286,7 @@ function EditInvoice(props: {
               type="text"
               id="Country"
               {...register("senderAddress.country", { required: true })}
-              className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+              className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
                 errors && errors.senderAddress?.country
                   ? "border-[red]"
                   : "border-[#DFE3FA] dark:border-[#252945]"
@@ -542,101 +545,114 @@ function EditInvoice(props: {
         <div className="flex flex-col ">
           <div className="flex flex-col items-center">
             {fields.map((item, index) => (
-              <div key={item.id} className="flex flex-col w-full mb-11 ">
-                <div className="flex flex-col">
+              <div
+              key={item.id}
+              className="flex flex-col md:flex-row md:items-center  w-full  mb-11 md:mb-5 "
+            >
+              <div className="flex flex-col md:w-[214px]  md:mr-4">
+                <label
+                  htmlFor={`itemName${index}`}
+                  className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                    index > 0 ? "md:hidden" : ""
+                  }`}
+                >
+                  Item Name
+                </label>
+                <input
+                  key={item.id}
+                  type="text"
+                  id={`itemName${index}`}
+                  {...register(`items.${index}.name`, { required: true })}
+                  className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                    errors && errors.items?.[index]?.name
+                      ? "border-[red]"
+                      : "border-[#DFE3FA] dark:border-[#252945]"
+                  }`}
+                />
+              </div>
+              <div className="flex items-center    mt-6 md:mt-0  ">
+                <div className="flex flex-col w-[20%] md:w-[46px] mr-4">
                   <label
-                    htmlFor={`itemName${index}`}
-                    className="spartan font-medium text-[17px] text-[#7E88C3]"
+                    htmlFor={`Qty${index}`}
+                    className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                      index > 0 ? "md:hidden" : ""
+                    }`}
                   >
-                    Item Name
+                    Qty.
                   </label>
                   <input
                     key={item.id}
-                    type="text"
-                    id={`itemName${index}`}
-                    {...register(`items.${index}.name`, { required: true })}
-                    className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
-                      errors && errors.items?.[index]?.name
+                    type="number"
+                    id={`Qty${index}`}
+                    {...register(`items.${index}.quantity` as const, {
+                      valueAsNumber: true,
+                      required: true,
+                    })}
+                    className={`pl-5 md:pl-0 md:text-center text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                      errors && errors.items?.[index]?.quantity
+                        ? "border-[red]"
+                        : "border-[#DFE3FA] dark:border-[#252945]"
+                    } `}
+                  />
+                </div>
+                <div className="flex flex-col w-[30%] md:w-[100px] md:mr-4 ">
+                  <label
+                    htmlFor={`Price${index}`}
+                    className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                      index > 0 ? "md:hidden" : ""
+                    }`}
+                  >
+                    Price
+                  </label>
+                  <input
+                    key={item.id}
+                    type="number"
+                    id={`Price${index}`}
+                    {...register(`items.${index}.price` as const, {
+                      valueAsNumber: true,
+                      required: true,
+                    })}
+                    className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                      errors && errors.items?.[index]?.price
                         ? "border-[red]"
                         : "border-[#DFE3FA] dark:border-[#252945]"
                     }`}
                   />
                 </div>
-                <div className="flex items-center mt-6">
-                  <div className="flex flex-col w-[20%] mr-4">
-                    <label
-                      htmlFor={`Qty${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
-                    >
-                      Qty.
-                    </label>
-                    <input
-                      key={item.id}
-                      type="number"
-                      id={`Qty${index}`}
-                      {...register(`items.${index}.quantity` as const, {
-                        valueAsNumber: true,
-                        required: true,
-                      })}
-                      className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
-                        errors && errors.items?.[index]?.quantity
-                          ? "border-[red]"
-                          : "border-[#DFE3FA] dark:border-[#252945]"
-                      } `}
-                    />
-                  </div>
-                  <div className="flex flex-col w-[30%] ">
-                    <label
-                      htmlFor={`Price${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
-                    >
-                      Price
-                    </label>
-                    <input
-                      key={item.id}
-                      type="number"
-                      id={`Price${index}`}
-                      {...register(`items.${index}.price` as const, {
-                        valueAsNumber: true,
-                        required: true,
-                      })}
-                      className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
-                        errors && errors.items?.[index]?.price
-                          ? "border-[red]"
-                          : "border-[#DFE3FA] dark:border-[#252945]"
-                      }`}
-                    />
-                  </div>
-                  <div className="flex flex-col w-[30%] ml-4 ">
-                    <label
-                      htmlFor={`Total${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
-                    >
-                      Total
-                    </label>
-                    <input
-                      type="number"
-                      id={`Total${index}`}
-                      value={updateTotal(index)}
-                      readOnly
-                      className=" text-[#888EB0] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] "
-                    />
-                  </div>
-                  <div
-                    onClick={() => removeItem(index)}
-                    className="flex items-center pt-7"
+                <div className="flex flex-col w-[30%] md:w-[60px] ml-4 md:mr-6 ">
+                  <label
+                    htmlFor={`Total${index}`}
+                    className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                      index > 0 ? "md:hidden" : ""
+                    }`}
                   >
-                    <Delete />
-                  </div>
+                    Total
+                  </label>
+                  <input
+                    type="number"
+                    id={`Total${index}`}
+                    value={updateTotal(index)}
+                    readOnly
+                    className=" text-[#0C0E16] spartan font-bold text-[15px] h-12  rounded outline-none  dark:bg-[#141625] dark:text-[#888EB0] "
+                  />
+                </div>
+                <div
+                  onClick={() => removeItem(index)}
+                  className={`"flex items-center pt-7  ${
+                    index > 0 ? "md:pt-0" : ""
+                  }`}
+                >
+                  <Delete />
                 </div>
               </div>
+            </div>
             ))}
           </div>
           <div className="flex justify-start w-full">
             <button
               onClick={addItem}
               type="button"
-              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px] w-[93%] h-12 dark:bg-[#252945] rounded-3xl"
+              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px] md:mt-2 w-[93%] h-12 dark:bg-[#252945] rounded-3xl"
             >
               + Add New Item
             </button>

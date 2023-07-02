@@ -22,6 +22,7 @@ function NewInvoice(props: {
   setIsNewInvoice: React.Dispatch<React.SetStateAction<boolean>>;
   setInvoices: React.Dispatch<React.SetStateAction<InvoiceData[]>>;
   invoices: InvoiceData[];
+  screenWidth: number;
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [term, setTerm] = useState<string | null>("Select Payment Terms");
@@ -157,7 +158,7 @@ function NewInvoice(props: {
   };
 
   return (
-    <div className="mt-[70px] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px] md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -166,10 +167,12 @@ function NewInvoice(props: {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full mt-4  pl-6  z-0"
+        className="w-full mt-4  pl-6 md:pl-14  z-0"
       >
         <div
-          className="flex items-center gap-2 mb-8"
+          className={`flex items-center gap-2 mb-8 ${
+            props.screenWidth >= 768 ? "hidden" : ""
+          }`}
           onClick={() => {
             props.setIsNewInvoice(false);
           }}
@@ -200,9 +203,9 @@ function NewInvoice(props: {
               : "border-[#DFE3FA] dark:border-[#252945]"
           }`}
         />
-        <div className="flex flex-col mt-6 w-full">
-          <div className="flex w-full">
-            <div className="flex flex-col w-full">
+        <div className="flex flex-col md:mr-0 md:flex-row md:items-center md:w-[93%] md:justify-between mt-6">
+          <div className="flex w-full md:w-[80%]">
+            <div className="flex flex-col w-full ">
               <label
                 htmlFor="city"
                 className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -239,7 +242,7 @@ function NewInvoice(props: {
               />
             </div>
           </div>
-          <div className="flex flex-col mt-6">
+          <div className="flex flex-col mt-6 md:mt-0">
             <label
               htmlFor="Country"
               className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -250,7 +253,7 @@ function NewInvoice(props: {
               type="text"
               id="Country"
               {...register("senderAddress.country", { required: true })}
-              className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+              className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
                 errors && errors.senderAddress?.country
                   ? "border-[red]"
                   : "border-[#DFE3FA] dark:border-[#252945]"
@@ -313,7 +316,7 @@ function NewInvoice(props: {
                 : "border-[#DFE3FA] dark:border-[#252945]"
             }`}
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col md:mr-0 md:flex-row md:items-center md:w-[93%] md:justify-between">
             <div className="flex">
               <div className="flex flex-col w-full">
                 <label
@@ -352,7 +355,7 @@ function NewInvoice(props: {
                 />
               </div>
             </div>
-            <div className="flex flex-col mt-6">
+            <div className="flex flex-col mt-6 md:mt-0">
               <label
                 htmlFor="Country"
                 className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -363,7 +366,7 @@ function NewInvoice(props: {
                 type="text"
                 id="Country"
                 {...register("clientAddress.country", { required: true })}
-                className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
                   errors && errors.clientAddress?.country
                     ? "border-[red]"
                     : "border-[#DFE3FA] dark:border-[#252945]"
@@ -393,7 +396,7 @@ function NewInvoice(props: {
             onCalendarOpen={() => setIsOpen(true)}
             onCalendarClose={() => setIsOpen(false)}
           />
-          <div className="absolute right-9 top-10">
+          <div className="absolute right-[10%] top-10">
             <Calendar />
           </div>
         </div>
@@ -498,14 +501,19 @@ function NewInvoice(props: {
             "At least one item is required"
           </p>
         )}
-        <div className="flex flex-col ">
-          <div className="flex flex-col items-center">
+        <div className="flex flex-col md:w-full">
+          <div className="flex flex-col items-center md:w-full">
             {fields.map((item, index) => (
-              <div key={item.id} className="flex flex-col w-full mb-11 ">
-                <div className="flex flex-col">
+              <div
+                key={item.id}
+                className="flex flex-col md:flex-row md:items-center  w-full  mb-11 md:mb-5 "
+              >
+                <div className="flex flex-col md:w-[214px]  md:mr-4">
                   <label
                     htmlFor={`itemName${index}`}
-                    className="spartan font-medium text-[17px] text-[#7E88C3]"
+                    className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                      index > 0 ? "md:hidden" : ""
+                    }`}
                   >
                     Item Name
                   </label>
@@ -514,18 +522,20 @@ function NewInvoice(props: {
                     type="text"
                     id={`itemName${index}`}
                     {...register(`items.${index}.name`, { required: true })}
-                    className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                    className={`w-[93%] md:w-full pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
                       errors && errors.items?.[index]?.name
                         ? "border-[red]"
                         : "border-[#DFE3FA] dark:border-[#252945]"
                     }`}
                   />
                 </div>
-                <div className="flex items-center mt-6">
-                  <div className="flex flex-col w-[20%] mr-4">
+                <div className="flex items-center    mt-6 md:mt-0  ">
+                  <div className="flex flex-col w-[20%] md:w-[46px] mr-4">
                     <label
                       htmlFor={`Qty${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
+                      className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                        index > 0 ? "md:hidden" : ""
+                      }`}
                     >
                       Qty.
                     </label>
@@ -537,17 +547,19 @@ function NewInvoice(props: {
                         valueAsNumber: true,
                         required: true,
                       })}
-                      className={`pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
+                      className={`pl-5 md:pl-0 md:text-center text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none  dark:bg-[#252945] dark:text-white ${
                         errors && errors.items?.[index]?.quantity
                           ? "border-[red]"
                           : "border-[#DFE3FA] dark:border-[#252945]"
                       } `}
                     />
                   </div>
-                  <div className="flex flex-col w-[30%] ">
+                  <div className="flex flex-col w-[30%] md:w-[100px] md:mr-4 ">
                     <label
                       htmlFor={`Price${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
+                      className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                        index > 0 ? "md:hidden" : ""
+                      }`}
                     >
                       Price
                     </label>
@@ -566,10 +578,12 @@ function NewInvoice(props: {
                       }`}
                     />
                   </div>
-                  <div className="flex flex-col w-[30%] ml-4 ">
+                  <div className="flex flex-col w-[30%] md:w-[60px] ml-4 md:mr-6 ">
                     <label
                       htmlFor={`Total${index}`}
-                      className="spartan font-medium text-[17px] text-[#7E88C3]"
+                      className={`spartan font-medium text-[17px] text-[#7E88C3] ${
+                        index > 0 ? "md:hidden" : ""
+                      }`}
                     >
                       Total
                     </label>
@@ -583,7 +597,9 @@ function NewInvoice(props: {
                   </div>
                   <div
                     onClick={() => removeItem(index)}
-                    className="flex items-center pt-7"
+                    className={`"flex items-center pt-7  ${
+                      index > 0 ? "md:pt-0" : ""
+                    }`}
                   >
                     <Delete />
                   </div>
@@ -595,7 +611,7 @@ function NewInvoice(props: {
             <button
               onClick={addItem}
               type="button"
-              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px] w-[93%] h-12 dark:bg-[#252945] rounded-3xl"
+              className="spartan text-[15px] text-[#7E88C3] font-bold  mt-[65px]  md:mt-2 w-[93%] h-12 dark:bg-[#252945] rounded-3xl"
             >
               + Add New Item
             </button>
@@ -604,7 +620,7 @@ function NewInvoice(props: {
       </form>
       <div className="w-full">
         <div className="w-full h-[64px] bg-gradient-to-b from-gradient-1 via-gradient-2  mt-10 "></div>
-        <div className="w-full flex items-center justify-around pt-[21px] pl-6 pr-6 pb-[22px] bg-white dark:bg-[#1E2139] ">
+        <div className="w-full  flex items-center justify-around md:justify-between md:pl-14 md:pr-12 pt-[21px] pl-6 pr-6 pb-[22px] bg-white dark:bg-[#1E2139] ">
           <button
             onClick={() => {
               props.setIsNewInvoice(false);
@@ -613,18 +629,20 @@ function NewInvoice(props: {
           >
             Discard
           </button>
-          <button
-            onClick={submitDraft}
-            className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]"
-          >
-            Save as Draft
-          </button>
-          <button
-            onClick={submit}
-            className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12 "
-          >
-            Save & Send
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={submitDraft}
+              className="spartan font-bold text-[15px] bg-[#373B53] text-[#888EB0] rounded-3xl w-[117px] h-12  dark:bg-[#373B53] dark:text-[#DFE3FA]"
+            >
+              Save as Draft
+            </button>
+            <button
+              onClick={submit}
+              className="spartan font-bold text-[15px] bg-[#7C5DFA] text-white rounded-3xl w-[112px] h-12 "
+            >
+              Save & Send
+            </button>
+          </div>
         </div>
       </div>
     </div>

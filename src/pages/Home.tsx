@@ -76,7 +76,7 @@ function Home(props: {
             className="flex items-center gap-3 relative"
           >
             <h2 className="spartan font-medium fonr-[12x] dark:text-white">
-              Filter
+             {` Filter ${props.screenWidth>=768? "by status":'' }`}
             </h2>
             <ArrowDown />
             <div
@@ -140,12 +140,12 @@ function Home(props: {
             onClick={() => {
               setIsNewInvoice(!isNewInvoice);
             }}
-            className="w-[90px] h-[44px] bg-[#7C5DFA]  rounded-[24px] flex items-center pl-[6px] gap-2"
+            className="w-[90px] md:w-[150px] h-[44px] md:h-12 bg-[#7C5DFA]  rounded-[24px] flex items-center pl-[6px] gap-2 md:gap-4"
           >
             <div className="w-8 h-8 bg-white rounded-[50%] flex items-center justify-center">
               <Plus />
             </div>
-            <p className="spartan font-bold text-[15px] text-white">New</p>
+            <p className="spartan font-bold text-[15px] text-white">{`New ${props.screenWidth>=768? "Invoice":'' }`}</p>
           </div>
         </div>
       </div>
@@ -155,6 +155,7 @@ function Home(props: {
         ) : (
           <NewInvoice
             setIsNewInvoice={setIsNewInvoice}
+            screenWidth={props.screenWidth}
             setInvoices={props.setInvoices}
             invoices={props.invoices}
           />
@@ -167,7 +168,7 @@ function Home(props: {
             There is nothing here
           </p>
           <p className="w-[70%] text-center spartan text-[#888EB0] dark:text-[#DFE3FA] font-medium text-[15px] mt-4">
-            Create an invoice by clicking the{" "}
+            Create an invoice by clicking the
             <span className="font-bold">New</span> button and get started
           </p>
         </div>
