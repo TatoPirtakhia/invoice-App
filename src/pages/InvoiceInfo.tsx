@@ -94,7 +94,7 @@ function InvoiceInfo(props: {
               />
             )}
           </div>
-          <div className="w-[86.51%]  xl:pt-[64px] flex flex-col items-start">
+          <div className="w-[86.51%] pt-[106px] md:pt-[122px]  xl:pt-[64px] flex flex-col items-start">
             <div
               className="flex items-center gap-2 mb-8"
               onClick={() => {

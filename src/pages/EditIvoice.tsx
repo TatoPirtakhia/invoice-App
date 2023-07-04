@@ -402,7 +402,7 @@ function EditInvoice(props: {
                 type="text"
                 id="Country"
                 {...register("clientAddress.country", { required: true })}
-                className={`w-[93%] md:w-full pl-5 text-center text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                className={`w-[93%] md:w-full pl-5  text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
                   errors && errors.clientAddress?.country
                     ? "border-[red]"
                     : "border-[#DFE3FA] dark:border-[#252945]"
