@@ -67,7 +67,7 @@ function InvoiceInfo(props: {
   };
 
   return (
-    <div className="w-full min-h-[100vh] bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]">
+    <div className="w-full xl:w-[58.7%] min-h-[100vh] bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]">
       {showDeleteWindow && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 dark:bg-[#141625] dark:bg-opacity-80 bg-opacity-50">
           <ConfirmDelete
@@ -79,8 +79,8 @@ function InvoiceInfo(props: {
         </div>
       )}
       {data ? (
-        <div className="w-full bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]  ">
-          <div className="animate-fade-in absolute z-10 top-0 w-full left-0 md:bg-[#000000] dark:md:bg-[#000000] dark:md:bg-opacity-40 md:bg-opacity-50">
+        <div className="w-full  bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]  ">
+          <div className="animate-fade-in absolute z-10 top-0 w-full  left-0 md:bg-[#000000] dark:md:bg-[#000000] dark:md:bg-opacity-40 md:bg-opacity-50">
             {!isEdit ? (
               ""
             ) : (
@@ -93,10 +93,8 @@ function InvoiceInfo(props: {
                 screenWidth={props.screenWidth}
               />
             )}
-
-            
           </div>
-          <div className="w-[86.51%] pt-[100px] flex flex-col items-start">
+          <div className="w-[86.51%]  xl:pt-[64px] flex flex-col items-start">
             <div
               className="flex items-center gap-2 mb-8"
               onClick={() => {
@@ -177,7 +175,7 @@ function InvoiceInfo(props: {
                 </button>
               </div>
             </div>
-            <div className="w-full flex flex-col items-start bg-white pt-6 pl-6 md:pl-8 rounded-[8px] dark:bg-[#1E2139] md:mb-[140px]">
+            <div className="w-full flex flex-col items-start bg-white pt-6 pl-6 md:pl-8 xl:pb-12 rounded-[8px] dark:bg-[#1E2139] md:mb-[140px] xl:mb-0">
               <div className="flex flex-col md:flex-row md:justify-between w-full md:pr-8">
                 <div className="flex flex-col">
                   <p className="spartan font-bold text-[#0C0E16] text-[16px] dark:text-white">
@@ -205,7 +203,7 @@ function InvoiceInfo(props: {
                   </p>
                 </div>
               </div>
-              <div className="mt-8 flex flex-col md:flex-row w-full md:items-start md:gap-[100px] md:mb-[52px]">
+              <div className="mt-8 xl:mt-5 flex flex-col md:flex-row w-full md:items-start md:gap-[100px] md:mb-[52px]">
                 <div className="flex gap-4 md:gap-[100px]">
                   <div className="">
                     <div>
@@ -325,7 +323,7 @@ function InvoiceInfo(props: {
                   );
                 })}
               </div>
-              <div className="w-[93%] bg-[#373B53] mb-6 p-6 flex items-center justify-between rounded-b-lg dark:bg-[#0C0E16]">
+              <div className="w-[93%] bg-[#373B53] mb-6 xl:mb-0 p-6 flex items-center justify-between rounded-b-lg dark:bg-[#0C0E16]">
                 <p className="spartan font-medium text-white text-[15px]">
                   Grand Total
                 </p>

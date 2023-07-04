@@ -158,7 +158,7 @@ function NewInvoice(props: {
   };
 
   return (
-    <div className="mt-[70px] md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px] xl:w-[42%] xl:mt-0  xl:ml-[88px]  md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -375,7 +375,8 @@ function NewInvoice(props: {
             </div>
           </div>
         </div>
-        <div className="relative mt-10 z-1">
+        <div className="flex flex-col md:flex-row w-full md:w-[93%] md:justify-between md:gap-3">
+        <div className="relative mt-10 z-1 md:w-[50%]">
           <label
             htmlFor="dateInput"
             className="spartan font-medium text-[17px] text-[#7E88C3]"
@@ -400,7 +401,7 @@ function NewInvoice(props: {
             <Calendar />
           </div>
         </div>
-        <div className="mt-10 relative z-0">
+        <div className="mt-10 relative z-0 md:w-[50%]">
           <label
             htmlFor="Terms"
             className="spartan font-medium text-[17px] text-[#7E88C3] mb-2"
@@ -410,7 +411,7 @@ function NewInvoice(props: {
           <div
             onClick={clickTerm}
             id="Terms"
-            className={`w-[93%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
+            className={`w-[93%] md:w-[100%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
               errors && errors.paymentTerms
                 ? "border-[red]"
                 : `${
@@ -473,6 +474,7 @@ function NewInvoice(props: {
               Net 30 Day
             </p>
           </div>
+        </div>
         </div>
         <div className="flex flex-col mt-6">
           <label

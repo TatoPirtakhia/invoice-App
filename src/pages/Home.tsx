@@ -56,7 +56,7 @@ function Home(props: {
   }, [checkedItems, props.invoices]);
 
   return (
-    <div className="pt-[106px] w-[86.51%] dark:bg-[#141625] bg-[#F8F8FB] pb-[100px]">
+    <div className="pt-[106px] xl:pt-[70px] w-[86.51%] xl:w-[50.7%] dark:bg-[#141625] bg-[#F8F8FB] pb-[100px]">
       <div className="flex items-center justify-between mb-8">
         <div className="flex flex-col">
           <p className="spartan font-bold text-[25px]  text-[#0C0E16] dark:text-white ">
@@ -129,7 +129,7 @@ function Home(props: {
                 />
                 <label
                   htmlFor="draft"
-                  className="spartan font-bold ml-4 text-[20x] dark:text-white"
+                  className="spartan font-bold ml-4 text-[20px] dark:text-white"
                 >
                   Draft
                 </label>
@@ -149,7 +149,7 @@ function Home(props: {
           </div>
         </div>
       </div>
-      <div className="absolute z-10 top-0 w-full left-0">
+      <div className="absolute z-10 top-0 w-full left-0 md:bg-[#000000] dark:md:bg-[#000000] dark:md:bg-opacity-40 md:bg-opacity-50">
         {!isNewInvoice ? (
           ""
         ) : (

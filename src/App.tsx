@@ -47,23 +47,23 @@ function App() {
   };
 
   return (
-    <div className="min-h-[100vh] bg-[#F8F8FB] dark:bg-[#141625] flex flex-col items-center">
-      <nav className="w-full h-[72px] bg-navColor dark:bg-[#1E2139] flex items-center justify-between fixed z-50">
-        <div className="flex items-end  w-[72px] h-full bg-[#7C5DFA] rounded-tr-[20px] rounded-br-[20px] ">
-          <div className="custom-style bg-[#9277FF] h-[35px] w-[72px] relative ">
-            <div className="absolute top-[-13px] left-6">
+    <div className="min-h-[100vh] bg-[#F8F8FB] dark:bg-[#141625] flex flex-col items-center relative">
+      <nav className="w-full h-[72px] bg-navColor dark:bg-[#1E2139] flex items-center justify-between fixed xl:absolute xl:left-0 z-50 xl:w-[103px] xl:h-[151%] xl:flex-col xl:rounded-tr-[20px] xl:rounded-br-[20px]">
+        <div className="flex items-end  w-[72px] h-full xl:h-[103px] xl:w-full bg-[#7C5DFA] rounded-tr-[20px] rounded-br-[20px] ">
+          <div className="custom-style bg-[#9277FF] h-[35px] w-[72px] xl:w-full xl:h-[50%] relative ">
+            <div className="absolute top-[-13px] left-6 xl:left-10">
               <Logo />
             </div>
           </div>
         </div>
-        <div className="flex items-center ">
+        <div className="flex items-center xl:flex-col xl:w-full">
           <div className={`p-6 ${dark ? "hidden" : ""}`} onClick={Switch}>
             <Moon />
           </div>
           <div className={`p-6 ${dark ? "" : "hidden"}`} onClick={Switch}>
             <Sun />
           </div>
-          <div className="pl-6 pr-6 pt-5 pb-5  border-l-[1px] border-l-[#494E6E]">
+          <div className="pl-6 pr-6 pt-5 pb-5 xl:pl-8 xl:w-[103px] border-l-[1px] border-l-[#494E6E] xl:border-t-[#494E6E]  xl:border-l-[0px] xl:border-t-[1px]  ">
             <img
               src={Avatar}
               className="h-[32px] w-[32px] rounded-[50%]    "

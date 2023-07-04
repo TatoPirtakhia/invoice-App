@@ -3,7 +3,11 @@ export default {
   darkMode: 'class',
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    
     extend: {
+      screens: {
+        'xl':'1440px'
+      },
       colors:{
         navColor:"#373B53",
         
