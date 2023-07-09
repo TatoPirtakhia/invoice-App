@@ -191,8 +191,25 @@ function EditInvoice(props: {
     handleSubmit(onSubmit)();
   };
 
+  const [isHovered, setIsHovered] = useState<boolean[]>(Array(fields.length).fill(false));
+  function handleMouseEnter(index: number) {
+    setIsHovered((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  }
+
+  function handleMouseLeave(index: number) {
+    setIsHovered((prevState) => {
+      const newState = [...prevState];
+      newState[index] = false;
+      return newState;
+    });
+  }
+
   return (
-    <div className="mt-[70px]  w-full xl:w-[43%] xl:pl-[20px] xl:ml-[88px] xl:mt-0 md:w-[77.6%] bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px]  w-full xl:w-[616px] xl:pl-[20px] xl:ml-[88px] xl:mt-0 md:w-[77.6%] bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -637,12 +654,14 @@ function EditInvoice(props: {
                   />
                 </div>
                 <div
+                     onMouseEnter={() => handleMouseEnter(index)}
+                     onMouseLeave={() => handleMouseLeave(index)}
                   onClick={() => removeItem(index)}
-                  className={`"flex items-center pt-7  ${
+                  className={`"flex items-center pt-7 cursor-pointer ${
                     index > 0 ? "md:pt-0" : ""
                   }`}
                 >
-                  <Delete />
+                  <Delete isHovered={isHovered[index]}/>
                 </div>
               </div>
             </div>

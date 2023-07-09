@@ -67,7 +67,7 @@ function InvoiceInfo(props: {
   };
 
   return (
-    <div className="w-full xl:w-[58.7%] min-h-[100vh] bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]">
+    <div className="w-full xl:w-[730px] min-h-[100vh] bg-[#F8F8FB] flex flex-col items-center dark:bg-[#141625]">
       {showDeleteWindow && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 dark:bg-[#141625] dark:bg-opacity-80 bg-opacity-50">
           <ConfirmDelete
@@ -94,7 +94,7 @@ function InvoiceInfo(props: {
               />
             )}
           </div>
-          <div className="w-[86.51%] pt-[106px] md:pt-[122px]  xl:pt-[64px] flex flex-col items-start">
+          <div className="w-[86.51%] xl:w-full pt-[106px] md:pt-[122px]  xl:pt-[64px] flex flex-col items-start">
             <div
               className="flex items-center gap-2 mb-8"
               onClick={() => {
@@ -102,7 +102,7 @@ function InvoiceInfo(props: {
               }}
             >
               <ArrowLeft />
-              <p className="spartan font-bold text-[15px] dark:text-white">
+              <p className="spartan font-bold text-[15px] dark:text-white xl:hover:text-[#7E88C3] cursor-pointer">
                 Go Back
               </p>
             </div>
@@ -152,20 +152,20 @@ function InvoiceInfo(props: {
               >
                 <button
                   onClick={() => setIsEdit(true)}
-                  className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl dark:bg-[#252945] dark:text-[#DFE3FA] spartan font-bold"
+                  className="w-[73px] h-[48px] bg-[#F9FAFE]   rounded-3xl dark:bg-[#252945] dark:text-[#DFE3FA] spartan font-bold xl:hover:bg-[#DFE3FA] xl:hover:text-[#7E88C3] cursor-pointer"
                 >
                   Edit
                 </button>
                 <button
                   onClick={deleteinvoice}
-                  className="w-[89px] h-[48px]  bg-[#EC5757]  rounded-3xl spartan text-white font-bold"
+                  className="w-[89px] h-[48px]  bg-[#EC5757]  rounded-3xl spartan text-white font-bold xl:hover:bg-[#FF9797] cursor-pointer"
                 >
                   Delete
                 </button>
                 <button
                   onClick={markAsPaid}
                   disabled={data.status === "paid"}
-                  className={`w-[150px] h-[48px] rounded-3xl spartan text-white font-bold ${
+                  className={`w-[150px] h-[48px] rounded-3xl spartan text-white font-bold  cursor-pointer xl:hover:bg-[#9277FF] ${
                     data.status === "paid"
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-[#7C5DFA]"

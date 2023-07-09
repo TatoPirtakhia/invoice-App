@@ -156,9 +156,24 @@ function NewInvoice(props: {
       setValue("createdAt", formattedDate);
     }
   };
+  const [isHovered, setIsHovered] = useState<boolean[]>(Array(fields.length).fill(false));
+  function handleMouseEnter(index: number) {
+    setIsHovered((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  }
 
+  function handleMouseLeave(index: number) {
+    setIsHovered((prevState) => {
+      const newState = [...prevState];
+      newState[index] = false;
+      return newState;
+    });
+  }
   return (
-    <div className="mt-[70px] xl:w-[42%] xl:mt-0  xl:ml-[88px]  md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px] xl:w-[616px] xl:mt-0  xl:ml-[88px]  md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -376,105 +391,105 @@ function NewInvoice(props: {
           </div>
         </div>
         <div className="flex flex-col md:flex-row w-full md:w-[93%] md:justify-between md:gap-3">
-        <div className="relative mt-10 z-1 md:w-[50%]">
-          <label
-            htmlFor="dateInput"
-            className="spartan font-medium text-[17px] text-[#7E88C3]"
-          >
-            Invoice Date
-          </label>
-          <ReactDatePicker
-            id="dateInput"
-            selected={selectedDate}
-            onChange={handleDateChange}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select a date"
-            className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
-              errors && errors.createdAt
-                ? "border-[red]"
-                : " dark:border-[#252945]"
-            } ${isOpen ? " border-[#7C5DFA] " : "border-[#DFE3FA] "}`}
-            onCalendarOpen={() => setIsOpen(true)}
-            onCalendarClose={() => setIsOpen(false)}
-          />
-          <div className="absolute right-[10%] top-10">
-            <Calendar />
+          <div className="relative mt-10 z-1 md:w-[50%]">
+            <label
+              htmlFor="dateInput"
+              className="spartan font-medium text-[17px] text-[#7E88C3]"
+            >
+              Invoice Date
+            </label>
+            <ReactDatePicker
+              id="dateInput"
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Select a date"
+              className={`w-[93%] pl-5 text-[#0C0E16] spartan font-bold text-[15px] h-12 border-[1px] rounded outline-none dark:bg-[#252945] dark:text-white ${
+                errors && errors.createdAt
+                  ? "border-[red]"
+                  : " dark:border-[#252945]"
+              } ${isOpen ? " border-[#7C5DFA] " : "border-[#DFE3FA] "}`}
+              onCalendarOpen={() => setIsOpen(true)}
+              onCalendarClose={() => setIsOpen(false)}
+            />
+            <div className="absolute right-[10%] top-10">
+              <Calendar />
+            </div>
           </div>
-        </div>
-        <div className="mt-10 relative z-0 md:w-[50%]">
-          <label
-            htmlFor="Terms"
-            className="spartan font-medium text-[17px] text-[#7E88C3] mb-2"
-          >
-            Payment Terms
-          </label>
-          <div
-            onClick={clickTerm}
-            id="Terms"
-            className={`w-[93%] md:w-[100%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
-              errors && errors.paymentTerms
-                ? "border-[red]"
-                : `${
-                    showTerm
-                      ? "border-[#7C5DFA] dark:border-[#252945]"
-                      : "border-[#DFE3FA] dark:border-[#252945]"
-                  }`
-            }`}
-          >
-            <p>{term}</p>
-            <ArrowDown />
+          <div className="mt-10 relative z-0 md:w-[50%]">
+            <label
+              htmlFor="Terms"
+              className="spartan font-medium text-[17px] text-[#7E88C3] mb-2"
+            >
+              Payment Terms
+            </label>
+            <div
+              onClick={clickTerm}
+              id="Terms"
+              className={`w-[93%] md:w-[100%] pl-5 text-[#0C0E16] rounded spartan font-bold text-[15px] h-12 border-[1px] flex items-center justify-between pr-5  dark:bg-[#252945] dark:text-white ${
+                errors && errors.paymentTerms
+                  ? "border-[red]"
+                  : `${
+                      showTerm
+                        ? "border-[#7C5DFA] dark:border-[#252945]"
+                        : "border-[#DFE3FA] dark:border-[#252945]"
+                    }`
+              }`}
+            >
+              <p>{term}</p>
+              <ArrowDown />
+            </div>
+            <div
+              className={`${
+                !showTerm ? "hidden" : ""
+              } absolute  w-[93%] bg-white rounded-lg shadow-term mt-6 dark:bg-[#252945]`}
+            >
+              <p
+                onClick={handleTermClick}
+                id="1"
+                className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                  term === "Net 1 Day"
+                    ? "text-[#7C5DFA]"
+                    : "text-[#0C0E16]  dark:text-white"
+                } `}
+              >
+                Net 1 Day
+              </p>
+              <p
+                onClick={handleTermClick}
+                id="7"
+                className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                  term === "Net 7 Day"
+                    ? "text-[#7C5DFA]"
+                    : "text-[#0C0E16] dark:text-white"
+                } `}
+              >
+                Net 7 Days
+              </p>
+              <p
+                onClick={handleTermClick}
+                id="14"
+                className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
+                  term === "Net 14 Day"
+                    ? "text-[#7C5DFA]"
+                    : "text-[#0C0E16] dark:text-white"
+                } `}
+              >
+                Net 14 Day
+              </p>
+              <p
+                onClick={handleTermClick}
+                id="30"
+                className={`border-b-[#DFE3FA] dark:border-b-[#1E2139] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
+                  term === "Net 30 Day"
+                    ? "text-[#7C5DFA]"
+                    : "text-[#0C0E16] dark:text-white "
+                } `}
+              >
+                Net 30 Day
+              </p>
+            </div>
           </div>
-          <div
-            className={`${
-              !showTerm ? "hidden" : ""
-            } absolute  w-[93%] bg-white rounded-lg shadow-term mt-6 dark:bg-[#252945]`}
-          >
-            <p
-              onClick={handleTermClick}
-              id="1"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 1 Day"
-                  ? "text-[#7C5DFA]"
-                  : "text-[#0C0E16]  dark:text-white"
-              } `}
-            >
-              Net 1 Day
-            </p>
-            <p
-              onClick={handleTermClick}
-              id="7"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 7 Day"
-                  ? "text-[#7C5DFA]"
-                  : "text-[#0C0E16] dark:text-white"
-              } `}
-            >
-              Net 7 Days
-            </p>
-            <p
-              onClick={handleTermClick}
-              id="14"
-              className={`border-b-[#DFE3FA] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] dark:border-b-[#1E2139] ${
-                term === "Net 14 Day"
-                  ? "text-[#7C5DFA]"
-                  : "text-[#0C0E16] dark:text-white"
-              } `}
-            >
-              Net 14 Day
-            </p>
-            <p
-              onClick={handleTermClick}
-              id="30"
-              className={`border-b-[#DFE3FA] dark:border-b-[#1E2139] border-b-[1px] w-full pl-6 pb-4 pt-4 spartan font-bold text-[15px] ${
-                term === "Net 30 Day"
-                  ? "text-[#7C5DFA]"
-                  : "text-[#0C0E16] dark:text-white "
-              } `}
-            >
-              Net 30 Day
-            </p>
-          </div>
-        </div>
         </div>
         <div className="flex flex-col mt-6">
           <label
@@ -598,12 +613,14 @@ function NewInvoice(props: {
                     />
                   </div>
                   <div
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={() => handleMouseLeave(index)}
                     onClick={() => removeItem(index)}
-                    className={`"flex items-center pt-7  ${
+                    className={`"flex items-center pt-7 cursor-pointer  ${
                       index > 0 ? "md:pt-0" : ""
                     }`}
                   >
-                    <Delete />
+                    <Delete isHovered={isHovered[index]} />
                   </div>
                 </div>
               </div>

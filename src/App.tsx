@@ -7,7 +7,7 @@ import Sun from "./assets/sun";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import InvoiceInfo from "./pages/InvoiceInfo";
-import Avatar from './assets/image-avatar.jpg' 
+import Avatar from "./assets/image-avatar.jpg";
 function App() {
   const [invoices, setInvoices] = useState<InvoiceData[]>([]);
   const [dark, setDark] = useState<boolean>(false);
@@ -18,10 +18,10 @@ function App() {
       setScreenWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
   useEffect(() => {
@@ -56,13 +56,30 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="flex items-center xl:flex-col xl:w-full">
-          <div className={`p-6 ${dark ? "hidden" : ""}`} onClick={Switch}>
+        <div className="flex items-center xl:flex-col xl:w-full gap-4">
+          {/* <div className={`p-6 ${dark ? "hidden" : ""}`} onClick={Switch}>
             <Moon />
           </div>
           <div className={`p-6 ${dark ? "" : "hidden"}`} onClick={Switch}>
             <Sun />
+          </div> */}
+          <div className="toggleWrapper" >
+            <input type="checkbox" className="dn" id="dn" onClick={Switch}/>
+            <label htmlFor="dn" className="toggle">
+              <span className="toggle__handler">
+                <span className="crater crater--1"></span>
+                <span className="crater crater--2"></span>
+                <span className="crater crater--3"></span>
+              </span>
+              <span className="star star--1"></span>
+              <span className="star star--2"></span>
+              <span className="star star--3"></span>
+              <span className="star star--4"></span>
+              <span className="star star--5"></span>
+              <span className="star star--6"></span>
+            </label>
           </div>
+
           <div className="pl-6 pr-6 pt-5 pb-5 xl:pl-8 xl:w-[103px] border-l-[1px] border-l-[#494E6E] xl:border-t-[#494E6E]  xl:border-l-[0px] xl:border-t-[1px]  ">
             <img
               src={Avatar}
@@ -76,11 +93,24 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route
           path="/home"
-          element={<Home screenWidth={screenWidth} invoices={invoices} setInvoices={setInvoices} dark={dark} />}
+          element={
+            <Home
+              screenWidth={screenWidth}
+              invoices={invoices}
+              setInvoices={setInvoices}
+              dark={dark}
+            />
+          }
         />
         <Route
           path="/InvoiceInfo/:id"
-          element={<InvoiceInfo screenWidth={screenWidth} invoices={invoices} setInvoices={setInvoices}/>}
+          element={
+            <InvoiceInfo
+              screenWidth={screenWidth}
+              invoices={invoices}
+              setInvoices={setInvoices}
+            />
+          }
         />
       </Routes>
     </div>

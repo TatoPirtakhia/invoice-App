@@ -75,7 +75,7 @@ function Home(props: {
             }}
             className="flex items-center gap-3 relative"
           >
-            <h2 className="spartan font-medium fonr-[12x] dark:text-white">
+            <h2 className="spartan font-medium fonr-[12x] dark:text-white text-[#0C0E16] cursor-pointer">
              {` Filter ${props.screenWidth>=768? "by status":'' }`}
             </h2>
             <ArrowDown />
@@ -84,10 +84,10 @@ function Home(props: {
                 hidden ? "hidden" : ""
               } flex-col p-6 items-start absolute w-[192px]  bg-white top-7 left-[-70px] rounded-[8px]  dark:bg-[#252945] shadow-filter dark:shadow-darkFilter  `}
             >
-              <div className="flex items-center">
+              <div className="flex items-center hover cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-5 h-5 text-[#7C5DFA]"
+                  className="w-5 h-5 text-[#7C5DFA] cursor-pointer"
                   id="paid"
                   name="paid"
                   checked={checkedItems.paid || false}
@@ -95,16 +95,16 @@ function Home(props: {
                 />
                 <label
                   htmlFor="paid"
-                  className="spartan font-bold ml-4 text-[20px] dark:text-white"
+                  className="spartan font-bold ml-4 text-[20px] dark:text-white cursor-pointer"
                 >
                   Paid
                 </label>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   id="pending"
-                  className="w-5 h-5"
+                  className="w-5 h-5 cursor-pointer"
                   style={{ color: "#7C5DFA" }}
                   name="pending"
                   checked={checkedItems.pending || false}
@@ -112,16 +112,16 @@ function Home(props: {
                 />
                 <label
                   htmlFor="pending"
-                  className="spartan font-bold ml-4 text-[20px] dark:text-white"
+                  className="spartan font-bold ml-4 text-[20px] dark:text-white cursor-pointer"
                 >
                   Pending
                 </label>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   id="draft"
-                  className="w-5 h-5 "
+                  className="w-5 h-5 cursor-pointer "
                   style={{ color: "#7C5DFA" }}
                   name="draft"
                   checked={checkedItems.draft || false}
@@ -129,7 +129,7 @@ function Home(props: {
                 />
                 <label
                   htmlFor="draft"
-                  className="spartan font-bold ml-4 text-[20px] dark:text-white"
+                  className="spartan font-bold ml-4 text-[20px] dark:text-white cursor-pointer"
                 >
                   Draft
                 </label>
@@ -140,7 +140,7 @@ function Home(props: {
             onClick={() => {
               setIsNewInvoice(!isNewInvoice);
             }}
-            className="w-[90px] md:w-[150px] h-[44px] md:h-12 bg-[#7C5DFA]  rounded-[24px] flex items-center pl-[6px] gap-2 md:gap-4"
+            className="w-[90px] md:w-[150px] h-[44px] md:h-12 bg-[#7C5DFA]  rounded-[24px] flex items-center pl-[6px] gap-2 md:gap-4 xl:hover:bg-[#9277FF] cursor-pointer"
           >
             <div className="w-8 h-8 bg-white rounded-[50%] flex items-center justify-center">
               <Plus />
