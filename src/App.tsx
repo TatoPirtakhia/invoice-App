@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { InvoiceData } from "./types";
 import getAllInvoice from "./requests/grtAllinvoices";
 import Logo from "./assets/logo";
-import Moon from "./assets/moon";
-import Sun from "./assets/sun";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import InvoiceInfo from "./pages/InvoiceInfo";
