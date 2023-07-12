@@ -209,7 +209,7 @@ function EditInvoice(props: {
   }
 
   return (
-    <div className="mt-[70px]  w-full xl:w-[616px] xl:pl-[20px] xl:ml-[88px] xl:mt-0 md:w-[77.6%] bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px]  w-full xl:w-[616px] xl:pl-[20px] xl:ml-[88px] xl:mt-0 md:w-[77.6%] bg-[#FFFFFF] pt-6 dark:bg-[#141625] overflow-auto h-screen">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />

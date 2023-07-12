@@ -173,7 +173,7 @@ function NewInvoice(props: {
     });
   }
   return (
-    <div className="mt-[70px] xl:w-[616px] xl:mt-0  xl:ml-[88px]  md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625]">
+    <div className="mt-[70px] xl:w-[616px] xl:mt-0  xl:ml-[88px]  md:w-[80%] w-full bg-[#FFFFFF] pt-6 dark:bg-[#141625] overflow-auto h-screen">
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
           <Loading />
@@ -182,7 +182,7 @@ function NewInvoice(props: {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full mt-4  pl-6 md:pl-14  z-0"
+        className="w-full mt-4  pl-6 md:pl-14  z-0 "
       >
         <div
           className={`flex items-center gap-2 mb-8 ${
