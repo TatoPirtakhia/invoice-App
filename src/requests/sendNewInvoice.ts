@@ -3,7 +3,7 @@ import { InvoiceData } from "../types";
 
 const sendNewInvoice = async (data: InvoiceData) => {
   try {
-    const response = await axios.post("https://invoice-app-rsqt.onrender.com/api/NewInvoice", {
+    const response = await axios.post("https://invoice-app-api-production-0211.up.railway.app/api/NewInvoice", {
       id: data.id,
       createdAt: data.createdAt,
       paymentDue: data.paymentDue,
