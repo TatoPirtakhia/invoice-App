@@ -3,7 +3,7 @@ import {  InvoiceData } from "../types";
 
 const editInvoice = async (data:InvoiceData) => {
   try {
-     const response = await axios.post("https://invoice-app-api-production-0211.up.railway.app/api/EditInvoice",data);
+     const response = await axios.put("https://invoice-app-api-production-0211.up.railway.app/api/EditInvoice",data);
      return response.data;
   
   } catch (error) {
